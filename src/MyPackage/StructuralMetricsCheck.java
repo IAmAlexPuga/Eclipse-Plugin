@@ -12,20 +12,23 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	int test3 = 0;
 	int c = 0;
 
-	@Override
-	public int[] getDefaultTokens() {
-		// TokenTypes.PLUS, TokenTypes.MINUS, TokenTypes.MOD, TokenTypes.DIV,
-		// TokenTypes.STAR , TokenTypes.VARIABLE_DEF
-		//TokenTypes.ASSIGN, TokenTypes.EXPR
-		return new int[] {TokenTypes.PLUS, TokenTypes.MINUS, TokenTypes.MOD, 
-				TokenTypes.DIV,TokenTypes.STAR , TokenTypes.VARIABLE_DEF, 
-				TokenTypes.NUM_INT, TokenTypes.ASSIGN, TokenTypes.EXPR};
-	}
+	
+	 @Override 
+	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
+		 return new int[] 
+				 {TokenTypes.PLUS, TokenTypes.MINUS, TokenTypes.MOD, TokenTypes.DIV,TokenTypes.STAR , TokenTypes.VARIABLE_DEF, 
+					TokenTypes.NUM_INT, TokenTypes.ASSIGN, TokenTypes.EXPR, TokenTypes.IDENT,
+					TokenTypes.SLIST };
+	 }
+	 
 
 	@Override
 	public int[] getAcceptableTokens() {
 		// TODO Auto-generated method stub
-		return null;
+		return new int[] {TokenTypes.PLUS, TokenTypes.MINUS, TokenTypes.MOD, 
+				TokenTypes.DIV,TokenTypes.STAR , TokenTypes.VARIABLE_DEF, 
+				TokenTypes.NUM_INT, TokenTypes.ASSIGN, TokenTypes.EXPR, TokenTypes.IDENT,
+				TokenTypes.SLIST };
 	}
 
 	@Override
@@ -40,47 +43,58 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Number of operators " + operators);
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
 		log(rootAST.getLineNo(), "Halstead Length: " + (operators + operands));
-		log(rootAST.getLineNo(), "isops: " + test);
-		log(rootAST.getLineNo(), "isopas: " + test2);
-		//log(rootAST.getLineNo(), "isops3: " + test3);
+		log(rootAST.getLineNo(), "isoperators: " + test);
+		log(rootAST.getLineNo(), "isoparands: " + test2);
+		log(rootAST.getLineNo(), "isoparands3: " + test3);
 		//log(rootAST.getLineNo(), "c: " + c);
 	}
 
 	@Override
 	public void visitToken(DetailAST aAST) {
 		//|| aAST.getType() == TokenTypes.ASSIGN
+		// checks to see if token is expression and its parent is SLIST
+		/*
+		 * if((aAST.getType() == TokenTypes.EXPR) && aAST.getParent().getType() ==
+		 * TokenTypes.SLIST ) { test += traverse(aAST); }
+		 * 
+		 * // checks to see if token is viraible def and parent is SLIST // needs to sub
+		 * 1 to operands since counts extra int if( aAST.getType() ==
+		 * TokenTypes.VARIABLE_DEF && aAST.getParent().getType() == TokenTypes.SLIST) {
+		 * operands -= 1; test += traverse(aAST); }
+		 */
 		
-		if(aAST.getType() == TokenTypes.EXPR )
-		{
-			operators += traverse(aAST);
-		}
-		
-		if(checkNum(aAST))
+		// checks if its a number
+		if(checkNum(aAST) && (aAST.getParent().getType() == TokenTypes.EXPR || checkOperator(aAST.getParent())))
 		{
 			test2 += 1;
 		}
 		
+		// if parent is operator || parent is expression
+		
+		
+		// Parent is expression, assign
+				// if exp and parent slist and child assign - 1
+				// if variable def & parent slist - 1
+		if(aAST.getParent().getType() == TokenTypes.SLIST && aAST.getType() == TokenTypes.VARIABLE_DEF)
+		{
+			operands -= 1;
+			traverse(aAST);
+			test3 += traverseOperands(aAST);
+		}else if(aAST.getParent().getType() == TokenTypes.SLIST && aAST.getType() == TokenTypes.EXPR)
+		{
+			operands -= 1;
+			test3 += traverseOperands(aAST);
+			traverse(aAST);
+		}
+		
+		
+		// checks if its an operator
 		
 		if(checkOperator(aAST))
 		{
-			test+=1;
+			operators+=1;
 		}
 		
-		// checkExpr(aAST) || aAST.getType() == TokenTypes.EXPR ||
-		 
-		/*
-		 * if (aAST.getType() == TokenTypes.ASSIGN && aAST.hasChildren()) {
-		 * 
-		 * // c += getOperators(aAST);
-		 * 
-		 * test = 2; objBlock = aAST.getFirstChild();
-		 * 
-		 * if (objBlock.getType() == TokenTypes.EXPR) { //this is my operators counter
-		 * works but misses ones // that variables already exist operators +=
-		 * traverse(objBlock); }
-		 * 
-		 * }
-		 */
 	}
 
 	private boolean checkExToAssign(DetailAST ast) {
@@ -149,6 +163,24 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		test2 = 0;
 		test3 = 0;
 	}
+	
+	private int traverseOperands(DetailAST ast) {
+		if (ast == null) {
+			return 0;
+		}
+
+		if (checkOperator(ast)) {
+			return traverseOperands(ast.getNextSibling()) + traverseOperands(ast.getFirstChild());
+
+		} else if (checkNum(ast)) {
+			
+			return 1 + traverseOperands(ast.getNextSibling()) + traverseOperands(ast.getFirstChild());
+
+		}
+
+		return traverseOperands(ast.getNextSibling()) + traverseOperands(ast.getFirstChild());
+	}
+	
 	
 	private int getItems(DetailAST ast)
 	{
