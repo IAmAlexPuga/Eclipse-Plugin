@@ -7,9 +7,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 
 	private int operators = 0;
 	private int operands = 0;
-	
-	private int test2 = 0;
-	private int test3 = 0;
 
 	
 	 @Override 
@@ -43,37 +40,35 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
 		log(rootAST.getLineNo(), "Halstead Length: " + (operators + operands));
 		
-		log(rootAST.getLineNo(), "Number of operators2 " + test3);
-		log(rootAST.getLineNo(), "Number of operands2: " + test2);
-		
 	}
 
 	@Override
 	public void visitToken(DetailAST aAST) {
 		
-		if(aAST.getParent().getType() == TokenTypes.SLIST && aAST.getType() == TokenTypes.VARIABLE_DEF)
-		{
-			operands -= 1;
-			operators += traverse(aAST.getFirstChild());
-		}else if(aAST.getParent().getType() == TokenTypes.SLIST && aAST.getType() == TokenTypes.EXPR)
-		{
-			operands -= 1;
-			operators += traverse(aAST.getFirstChild().getFirstChild());
-		}
+		// traversers through the tree, not sure why this over counts but
+		// have a different solution. Might look into this
+//		if(aAST.getParent().getType() == TokenTypes.SLIST && aAST.getType() == TokenTypes.VARIABLE_DEF)
+//		{
+//			operands -= 1;
+//			operators += traverse(aAST.getFirstChild());
+//		}else if(aAST.getParent().getType() == TokenTypes.SLIST && aAST.getType() == TokenTypes.EXPR)
+//		{
+//			operands -= 1;
+//			operators += traverse(aAST.getFirstChild().getFirstChild());
+//		}
 		
 		
 		// this also works to get operands
 				
-				 // checks if its a number 
+		// checks if its a number 
 		if(checkNum(aAST) && (aAST.getParent().getType() ==TokenTypes.EXPR || checkOperator(aAST.getParent()))) {
-			test2 += 1; 
+			operands += 1; 
 		}
 				 
-		// this also works to get operators
 				
-				 // checks if its an operator 
+		// checks if its an operator 
 		if(checkOperator(aAST)) { 
-			test3+=1; 
+			operators+=1; 
 		}
 				 
 		
@@ -112,8 +107,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		// init the variables
 		operators = 0;
 		operands = 0;
-		test2 = 0;
-		test3 = 0;
 		
 	}
 	
