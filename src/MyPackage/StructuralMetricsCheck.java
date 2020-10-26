@@ -70,6 +70,11 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		if(checkOperator(aAST)) { 
 			operators+=1; 
 		}
+		
+		// checks if unique operator to add to uniqOp
+		if(checkUniqueOps(aAST)) {
+			uniqOps.put(aAST.getType(), 1);
+		}
 				 
 		
 	}
@@ -95,7 +100,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 			return false;
 			
 		}else {
-			uniqOps.put(ast.getType(), 1);
 			return true;
 		}
 	}
