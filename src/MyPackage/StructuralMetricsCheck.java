@@ -8,6 +8,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 
 	private int operators = 0;
 	private int operands = 0;
+	private int expressions = 0;
 	private Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
 	
 	 @Override 
@@ -39,7 +40,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
 		log(rootAST.getLineNo(), "Halstead Length: " + (operators + operands));
 		log(rootAST.getLineNo(), "Unique Operators: " + uniqOps.size());
-		
+		log(rootAST.getLineNo(), "Expressions: " + expressions);
 	}
 
 	@Override
@@ -74,6 +75,11 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		// checks if unique operator to add to uniqOps
 		if(checkUniqueOps(aAST)) {
 			uniqOps.put(aAST.getType(), 1);
+		}
+		
+		// checks if token is an expression
+		if(checkExpression(aAST)) {
+			expressions += 1;
 		}
 				 
 		
@@ -151,6 +157,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		operators = 0;
 		operands = 0;
 		uniqOps = new HashMap<Integer, Integer>();
+		expressions = 0;
 		
 	}
 	
