@@ -97,7 +97,13 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		return ast.getType() == TokenTypes.PLUS || ast.getType() == TokenTypes.MINUS || ast.getType() == TokenTypes.STAR
 				|| ast.getType() == TokenTypes.DIV || ast.getType() == TokenTypes.MOD || ast.getType() == TokenTypes.PLUS_ASSIGN 
 				|| ast.getType() == TokenTypes.MINUS_ASSIGN || ast.getType() == TokenTypes.DIV_ASSIGN || ast.getType() == TokenTypes.ASSIGN
-				|| ast.getType() == TokenTypes.STAR_ASSIGN || ast.getType() == TokenTypes.MOD_ASSIGN  ;
+				|| ast.getType() == TokenTypes.STAR_ASSIGN || ast.getType() == TokenTypes.MOD_ASSIGN || ast.getType() == TokenTypes.INC
+				|| ast.getType() ==TokenTypes.POST_INC || ast.getType() == TokenTypes.DEC || ast.getType() == TokenTypes.POST_DEC || ast.getType() == TokenTypes.GE
+				|| ast.getType() == TokenTypes.GT || ast.getType() == TokenTypes.SR || ast.getType() == TokenTypes.SR_ASSIGN || ast.getType() == TokenTypes.LE || ast.getType() == TokenTypes.LT
+				|| ast.getType() ==TokenTypes.SL || ast.getType() == TokenTypes.SL_ASSIGN || ast.getType() == TokenTypes.EQUAL || ast.getType() == TokenTypes.NOT_EQUAL
+				|| ast.getType() ==TokenTypes.BAND || ast.getType() == TokenTypes.BAND_ASSIGN || ast.getType() == TokenTypes.BNOT || ast.getType() == TokenTypes.BOR || ast.getType() == TokenTypes.BOR_ASSIGN
+				|| ast.getType() == TokenTypes.BXOR || ast.getType() == TokenTypes.BXOR_ASSIGN || ast.getType() == TokenTypes.LOR || ast.getType() == TokenTypes.LNOT || ast.getType() == TokenTypes.QUESTION
+				|| ast.getType() ==TokenTypes.COLON;
 	}
 
 	private boolean checkNum(DetailAST ast) {
@@ -122,22 +128,86 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		int type = ast.getType();
 		
 		// checks what op the ast type is
-		if(type == TokenTypes.PLUS || type == TokenTypes.PLUS_ASSIGN) {
+		switch(type) {
+		case TokenTypes.PLUS:
 			return TokenTypes.PLUS;
-		} else if(type == TokenTypes.MINUS || type == TokenTypes.MINUS_ASSIGN) {
+		case TokenTypes.PLUS_ASSIGN:
+			return TokenTypes.PLUS_ASSIGN;
+		case TokenTypes.MINUS:
 			return TokenTypes.MINUS;
-		}else if(type == TokenTypes.MOD || type == TokenTypes.MOD_ASSIGN) {
+		case TokenTypes.MINUS_ASSIGN:
+			return TokenTypes.MINUS_ASSIGN;
+		case TokenTypes.MOD:
 			return TokenTypes.MOD;
-		}else if(type == TokenTypes.STAR || type == TokenTypes.STAR_ASSIGN) {
+		case TokenTypes.MOD_ASSIGN:
+			return TokenTypes.MOD_ASSIGN;
+		case TokenTypes.STAR:
 			return TokenTypes.STAR;
-		}else if(type == TokenTypes.DIV || type == TokenTypes.DIV_ASSIGN) {
+		case TokenTypes.STAR_ASSIGN:
+			return TokenTypes.STAR_ASSIGN;
+		case TokenTypes.DIV:
 			return TokenTypes.DIV;
+		case TokenTypes.DIV_ASSIGN:
+			return TokenTypes.DIV_ASSIGN;
+		case TokenTypes.INC:
+			return TokenTypes.INC;
+		case TokenTypes.POST_INC:
+			return TokenTypes.POST_INC;
+		case TokenTypes.DEC:
+			return TokenTypes.DEC;
+		case TokenTypes.POST_DEC:
+			return TokenTypes.POST_DEC;
+		case TokenTypes.GE:
+			return TokenTypes.GE;
+		case TokenTypes.GT:
+			return TokenTypes.GT;
+		case TokenTypes.SR:
+			return TokenTypes.SR;
+		case TokenTypes.SR_ASSIGN:
+			return TokenTypes.SR_ASSIGN;
+		case TokenTypes.LE:
+			return TokenTypes.LE;
+		case TokenTypes.LT:
+			return TokenTypes.LT;
+		case TokenTypes.SL:
+			return TokenTypes.SL;
+		case TokenTypes.SL_ASSIGN:
+			return TokenTypes.SL_ASSIGN;
+		case TokenTypes.EQUAL:
+			return TokenTypes.EQUAL;
+		case TokenTypes.NOT_EQUAL:
+			return TokenTypes.NOT_EQUAL;
+		case TokenTypes.BAND:
+			return TokenTypes.BAND;
+		case TokenTypes.BAND_ASSIGN:
+			return TokenTypes.BAND_ASSIGN;
+		case TokenTypes.BNOT:
+			return TokenTypes.BNOT;
+		case TokenTypes.BOR:
+			return TokenTypes.BOR;
+		case TokenTypes.BOR_ASSIGN:
+			return TokenTypes.BOR_ASSIGN;
+		case TokenTypes.BXOR:
+			return TokenTypes.BXOR;
+		case TokenTypes.BXOR_ASSIGN:
+			return TokenTypes.BXOR_ASSIGN;
+		case TokenTypes.LOR:
+			return TokenTypes.LOR;
+		case TokenTypes.LNOT:
+			return TokenTypes.LNOT;
+		case TokenTypes.QUESTION:
+			return TokenTypes.QUESTION;
+		case TokenTypes.COLON:
+			return TokenTypes.COLON;
+		default:
+			break;
 		}
 		
 		return -1;
 		
 	}
 
+	
 	private int traverse(DetailAST ast) {
 		if (ast == null) {
 			return 0;
