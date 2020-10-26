@@ -11,10 +11,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	
 	 @Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
-		 return new int[] 
-				 {TokenTypes.PLUS, TokenTypes.MINUS, TokenTypes.MOD, TokenTypes.DIV,TokenTypes.STAR , TokenTypes.VARIABLE_DEF, 
-					TokenTypes.NUM_INT, TokenTypes.ASSIGN, TokenTypes.EXPR, TokenTypes.IDENT,
-					TokenTypes.SLIST };
+		 return getAcceptableTokens();
 	 }
 	 
 
@@ -24,13 +21,14 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		return new int[] {TokenTypes.PLUS, TokenTypes.MINUS, TokenTypes.MOD, 
 				TokenTypes.DIV,TokenTypes.STAR , TokenTypes.VARIABLE_DEF, 
 				TokenTypes.NUM_INT, TokenTypes.ASSIGN, TokenTypes.EXPR, TokenTypes.IDENT,
-				TokenTypes.SLIST };
+				TokenTypes.SLIST, TokenTypes.PLUS_ASSIGN, TokenTypes.MINUS_ASSIGN, TokenTypes.DIV_ASSIGN,
+				TokenTypes.STAR_ASSIGN, TokenTypes.MOD_ASSIGN};
 	}
 
 	@Override
 	public int[] getRequiredTokens() {
 		// TODO Auto-generated method stub
-		return null;
+		return getAcceptableTokens();
 	}
 
 	@Override
@@ -76,7 +74,9 @@ public class StructuralMetricsCheck extends AbstractCheck {
 
 	private boolean checkOperator(DetailAST ast) {
 		return ast.getType() == TokenTypes.PLUS || ast.getType() == TokenTypes.MINUS || ast.getType() == TokenTypes.STAR
-				|| ast.getType() == TokenTypes.DIV || ast.getType() == TokenTypes.MOD;
+				|| ast.getType() == TokenTypes.DIV || ast.getType() == TokenTypes.MOD || ast.getType() == TokenTypes.PLUS_ASSIGN 
+				|| ast.getType() == TokenTypes.MINUS_ASSIGN || ast.getType() == TokenTypes.DIV_ASSIGN
+				|| ast.getType() == TokenTypes.STAR_ASSIGN || ast.getType() == TokenTypes.MOD_ASSIGN;
 	}
 
 	private boolean checkNum(DetailAST ast) {
