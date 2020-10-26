@@ -2,12 +2,13 @@ package MyPackage;
 
 import com.puppycrawl.tools.checkstyle.api.*;
 import java.util.regex.Pattern;
+import java.util.*;
 
 public class StructuralMetricsCheck extends AbstractCheck {
 
 	private int operators = 0;
 	private int operands = 0;
-
+	private Dictionary uniqOps = new Hashtable();
 	
 	 @Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
