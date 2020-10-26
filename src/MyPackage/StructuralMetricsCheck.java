@@ -71,12 +71,16 @@ public class StructuralMetricsCheck extends AbstractCheck {
 			operators+=1; 
 		}
 		
-		// checks if unique operator to add to uniqOp
+		// checks if unique operator to add to uniqOps
 		if(checkUniqueOps(aAST)) {
 			uniqOps.put(aAST.getType(), 1);
 		}
 				 
 		
+	}
+	
+	private boolean checkExpression(DetailAST ast) {
+		return ast.getType() == TokenTypes.EXPR;
 	}
 
 	private boolean checkOperator(DetailAST ast) {
