@@ -8,7 +8,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 
 	private int operators = 0;
 	private int operands = 0;
-	private Dictionary uniqOps = new Hashtable();
+	private Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
 	
 	 @Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
@@ -38,6 +38,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Number of operators " + operators);
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
 		log(rootAST.getLineNo(), "Halstead Length: " + (operators + operands));
+		log(rootAST.getLineNo(), "Unique Operators: " + uniqOps.size());
 		
 	}
 
@@ -85,6 +86,39 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				|| ast.getType() == TokenTypes.NUM_FLOAT || ast.getType() == TokenTypes.NUM_LONG
 				|| ast.getType() == TokenTypes.IDENT;
 	}
+	
+	private boolean checkUniqueOps(DetailAST ast) {
+		int key = convertUniqueOp(ast);
+		
+		// makes sure key is non negative and uniqOps does not contain key
+		if(key != -1 && !uniqOps.containsKey(key)) {
+			return false;
+			
+		}else {
+			uniqOps.put(ast.getType(), 1);
+			return true;
+		}
+	}
+	
+	private int convertUniqueOp(DetailAST ast) {
+		int type = ast.getType();
+		
+		// checks what op the ast type is
+		if(type == TokenTypes.PLUS || type == TokenTypes.PLUS_ASSIGN) {
+			return TokenTypes.PLUS;
+		} else if(type == TokenTypes.MINUS || type == TokenTypes.MINUS_ASSIGN) {
+			return TokenTypes.MINUS;
+		}else if(type == TokenTypes.MOD || type == TokenTypes.MOD_ASSIGN) {
+			return TokenTypes.MOD;
+		}else if(type == TokenTypes.STAR || type == TokenTypes.STAR_ASSIGN) {
+			return TokenTypes.STAR;
+		}else if(type == TokenTypes.DIV || type == TokenTypes.DIV_ASSIGN) {
+			return TokenTypes.DIV;
+		}
+		
+		return -1;
+		
+	}
 
 	private int traverse(DetailAST ast) {
 		if (ast == null) {
@@ -108,6 +142,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		// init the variables
 		operators = 0;
 		operands = 0;
+		uniqOps = new HashMap<Integer, Integer>();
 		
 	}
 	
