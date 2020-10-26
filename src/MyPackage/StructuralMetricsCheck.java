@@ -39,12 +39,14 @@ public class StructuralMetricsCheck extends AbstractCheck {
 
 	@Override
 	public void finishTree(DetailAST rootAST) {
+		
 		// logs data for MS1
 		log(rootAST.getLineNo(), "Number of operators " + operators);
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
 		log(rootAST.getLineNo(), "Halstead Length: " + (operators + operands));
 		log(rootAST.getLineNo(), "Unique Operators: " + uniqOps.size());
 		log(rootAST.getLineNo(), "Expressions: " + expressions);
+
 	}
 
 	@Override
@@ -77,9 +79,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		}
 		
 		// checks if unique operator to add to uniqOps
-		if(checkUniqueOps(aAST)) {
-			uniqOps.put(aAST.getType(), 1);
-		}
+		addUniqueOps(aAST);
 		
 		// checks if token is an expression
 		if(checkExpression(aAST)) {
@@ -112,23 +112,19 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				|| ast.getType() == TokenTypes.IDENT;
 	}
 	
-	private boolean checkUniqueOps(DetailAST ast) {
+	private void addUniqueOps(DetailAST ast) {
 		int key = convertUniqueOp(ast);
-		
 		// makes sure key is non negative and uniqOps does not contain key
 		if(key != -1 && !uniqOps.containsKey(key)) {
-			return false;
-			
-		}else {
-			return true;
+			uniqOps.put(key, 1);
 		}
 	}
 	
 	private int convertUniqueOp(DetailAST ast) {
 		int type = ast.getType();
-		
+		//list += " " + type;
 		// checks what op the ast type is
-		switch(type) {
+		switch(ast.getType()) {
 		case TokenTypes.PLUS:
 			return TokenTypes.PLUS;
 		case TokenTypes.PLUS_ASSIGN:
@@ -199,6 +195,8 @@ public class StructuralMetricsCheck extends AbstractCheck {
 			return TokenTypes.QUESTION;
 		case TokenTypes.COLON:
 			return TokenTypes.COLON;
+		case TokenTypes.ASSIGN:
+			return TokenTypes.ASSIGN;
 		default:
 			break;
 		}
