@@ -53,14 +53,15 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		double hDiff = ((.5*uniqOps.size())* operands )/uniqOps.size();
 		double hEffort = hDiff*hVolume;
 		
+		
 		// logs data for MS1
 		log(rootAST.getLineNo(), "Number of operators " + operators);
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
 		log(rootAST.getLineNo(), "Halstead Length: " + hLength );
 		log(rootAST.getLineNo(), "Halstead Vocab: " + hVocab);
-		log(rootAST.getLineNo(), "Halstead Volume: " + hVolume);
-		log(rootAST.getLineNo(), "Halstead Difficulty: " + hDiff);
-		log(rootAST.getLineNo(), "Halstead Effort: " + hEffort);
+		log(rootAST.getLineNo(), "Halstead Volume: " + 	String. format("%.2f", hVolume));
+		log(rootAST.getLineNo(), "Halstead Difficulty: " + String. format("%.2f", hDiff));
+		log(rootAST.getLineNo(), "Halstead Effort: " + String. format("%.2f", hEffort));
 		log(rootAST.getLineNo(), "Expressions: " + expressions);
 		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
 		log(rootAST.getLineNo(), "Number of Comments: " + numComments);
@@ -199,87 +200,8 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	
 	private int convertUniqueOp(DetailAST ast) {
 		// can use check operator then just return ast.getType()
-		//if(checkOperator(ast)) {
-			//return ast.getType();
-		//}
-		
-		//return -1;
-		// checks what op the ast type is
-		switch(ast.getType()) {
-		case TokenTypes.PLUS:
-			return TokenTypes.PLUS;
-		case TokenTypes.PLUS_ASSIGN:
-			return TokenTypes.PLUS_ASSIGN;
-		case TokenTypes.MINUS:
-			return TokenTypes.MINUS;
-		case TokenTypes.MINUS_ASSIGN:
-			return TokenTypes.MINUS_ASSIGN;
-		case TokenTypes.MOD:
-			return TokenTypes.MOD;
-		case TokenTypes.MOD_ASSIGN:
-			return TokenTypes.MOD_ASSIGN;
-		case TokenTypes.STAR:
-			return TokenTypes.STAR;
-		case TokenTypes.STAR_ASSIGN:
-			return TokenTypes.STAR_ASSIGN;
-		case TokenTypes.DIV:
-			return TokenTypes.DIV;
-		case TokenTypes.DIV_ASSIGN:
-			return TokenTypes.DIV_ASSIGN;
-		case TokenTypes.INC:
-			return TokenTypes.INC;
-		case TokenTypes.POST_INC:
-			return TokenTypes.POST_INC;
-		case TokenTypes.DEC:
-			return TokenTypes.DEC;
-		case TokenTypes.POST_DEC:
-			return TokenTypes.POST_DEC;
-		case TokenTypes.GE:
-			return TokenTypes.GE;
-		case TokenTypes.GT:
-			return TokenTypes.GT;
-		case TokenTypes.SR:
-			return TokenTypes.SR;
-		case TokenTypes.SR_ASSIGN:
-			return TokenTypes.SR_ASSIGN;
-		case TokenTypes.LE:
-			return TokenTypes.LE;
-		case TokenTypes.LT:
-			return TokenTypes.LT;
-		case TokenTypes.SL:
-			return TokenTypes.SL;
-		case TokenTypes.SL_ASSIGN:
-			return TokenTypes.SL_ASSIGN;
-		case TokenTypes.EQUAL:
-			return TokenTypes.EQUAL;
-		case TokenTypes.NOT_EQUAL:
-			return TokenTypes.NOT_EQUAL;
-		case TokenTypes.BAND:
-			return TokenTypes.BAND;
-		case TokenTypes.BAND_ASSIGN:
-			return TokenTypes.BAND_ASSIGN;
-		case TokenTypes.BNOT:
-			return TokenTypes.BNOT;
-		case TokenTypes.BOR:
-			return TokenTypes.BOR;
-		case TokenTypes.BOR_ASSIGN:
-			return TokenTypes.BOR_ASSIGN;
-		case TokenTypes.BXOR:
-			return TokenTypes.BXOR;
-		case TokenTypes.BXOR_ASSIGN:
-			return TokenTypes.BXOR_ASSIGN;
-		case TokenTypes.LOR:
-			return TokenTypes.LOR;
-		case TokenTypes.LNOT:
-			return TokenTypes.LNOT;
-		case TokenTypes.QUESTION:
-			return TokenTypes.QUESTION;
-		case TokenTypes.COLON:
-			return TokenTypes.COLON;
-		case TokenTypes.ASSIGN:
-			return TokenTypes.ASSIGN;
-		default:
-			break;
+		if(checkOperator(ast)) {
+			return ast.getType();
 		}
 		
 		return -1;
