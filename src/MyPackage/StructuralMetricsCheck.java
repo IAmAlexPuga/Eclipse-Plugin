@@ -71,19 +71,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	@Override
 	public void visitToken(DetailAST aAST) {
 		
-		// traversers through the tree, not sure why this over counts but
-		// have a different solution. Might look into this
-//		if(aAST.getParent().getType() == TokenTypes.SLIST && aAST.getType() == TokenTypes.VARIABLE_DEF)
-//		{
-//			operands -= 1;
-//			operators += traverse(aAST.getFirstChild());
-//		}else if(aAST.getParent().getType() == TokenTypes.SLIST && aAST.getType() == TokenTypes.EXPR)
-//		{
-//			operands -= 1;
-//			operators += traverse(aAST.getFirstChild().getFirstChild());
-//		}
-		
-		
 		// this also works to get operands
 				
 		// checks if its a number 
@@ -104,6 +91,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 			expressions += 1;
 		}
 		
+		// checks for unique operands 
 		if(isValidIdent(aAST)) {
 			if(!uniqOperands.containsKey(aAST.getText()))
 			{
@@ -111,22 +99,27 @@ public class StructuralMetricsCheck extends AbstractCheck {
 			}
 		}
 		
+		// checks for loops
 		if(isLoop(aAST)) {
 			loops += 1;
 		}
 		
+		// checks for comments
 		if(isComment(aAST)) {
 			numComments += 1;
 		}
 		
+		// checks for beg of block comment
 		if(aAST.getType() == TokenTypes.BLOCK_COMMENT_BEGIN) {
 			bcls = aAST.getLineNo();
 		}
 		
+		// checks for end of block comment
 		if(aAST.getType() == TokenTypes.BLOCK_COMMENT_END) {
 			bcle = aAST.getLineNo();
 		}
 		
+		// computes the size of block comment
 		if(bcle != -1 && bcls != -1) {
 			computeBCCount();
 		}
@@ -206,6 +199,11 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	
 	private int convertUniqueOp(DetailAST ast) {
 		// can use check operator then just return ast.getType()
+		//if(checkOperator(ast)) {
+			//return ast.getType();
+		//}
+		
+		//return -1;
 		// checks what op the ast type is
 		switch(ast.getType()) {
 		case TokenTypes.PLUS:
