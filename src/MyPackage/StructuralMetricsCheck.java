@@ -12,9 +12,10 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	private int loops = 0;
 	private int numComments = 0;
 	private int numLinesComments = 0;
+	private int bcls = -1;
+	private int bcle = -1;
 	private Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
 	private Map<String, Integer> uniqOperands =  new HashMap<String, Integer>();
-	private String list = "";
 	 
 	@Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
@@ -35,7 +36,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				, TokenTypes.BAND, TokenTypes.BAND_ASSIGN, TokenTypes.BNOT, TokenTypes.BOR, TokenTypes.BOR_ASSIGN,
 				TokenTypes.BXOR, TokenTypes.BXOR_ASSIGN,TokenTypes.LOR, TokenTypes.LNOT, TokenTypes.QUESTION, TokenTypes.COLON,
 				TokenTypes.DOT, TokenTypes.STRING_LITERAL, TokenTypes.LITERAL_WHILE, TokenTypes.LITERAL_FOR, TokenTypes.DO_WHILE,
-				TokenTypes.SINGLE_LINE_COMMENT, TokenTypes.BLOCK_COMMENT_BEGIN};
+				TokenTypes.SINGLE_LINE_COMMENT, TokenTypes.BLOCK_COMMENT_BEGIN, TokenTypes.COMMENT_CONTENT, TokenTypes.BLOCK_COMMENT_END};
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Expressions: " + expressions);
 		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
 		log(rootAST.getLineNo(), "Number of Comments: " + numComments);
-		log(rootAST.getLineNo(), "Identities : " + list);
+		log(rootAST.getLineNo(), "Number of Lines Of Comments: " + (numLinesComments + numComments));
 
 	}
 
@@ -99,7 +100,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 			if(!uniqOperands.containsKey(aAST.getText()))
 			{
 				uniqOperands.put(aAST.getText(), 1);
-				list += " " + aAST.getText();
 			}
 		}
 		
@@ -111,7 +111,27 @@ public class StructuralMetricsCheck extends AbstractCheck {
 			numComments += 1;
 		}
 		
+		if(aAST.getType() == TokenTypes.BLOCK_COMMENT_BEGIN) {
+			bcls = aAST.getLineNo();
+		}
+		
+		if(aAST.getType() == TokenTypes.BLOCK_COMMENT_END) {
+			bcle = aAST.getLineNo();
+		}
+		
+		if(bcle != -1 && bcls != -1) {
+			computeBCCount();
+		}
+		
 	}
+	
+	
+	private void computeBCCount() {
+		numLinesComments += (bcle - bcls);
+		bcle = -1;
+		bcls = -1;
+	}
+	
 	private boolean isComment(DetailAST ast) {
 		return ast.getParent().getType() != TokenTypes.BLOCK_COMMENT_BEGIN && 
 				(ast.getType() == TokenTypes.SINGLE_LINE_COMMENT ||
@@ -294,6 +314,8 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		expressions = 0;
 		numComments = 0;
 		numLinesComments = 0;
+		bcls = -1;
+		bcle = -1;
 		
 	}
 	
