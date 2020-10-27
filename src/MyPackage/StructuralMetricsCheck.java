@@ -9,10 +9,12 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	private int operators = 0;
 	private int operands = 0;
 	private int expressions = 0;
+	private int loops = 0;
 	private Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
 	private Map<String, Integer> uniqOperands =  new HashMap<String, Integer>();
 	private String list = "";
-	 @Override 
+	 
+	@Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
 		 return getAcceptableTokens();
 	 }
@@ -30,7 +32,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				TokenTypes.LE, TokenTypes.LT, TokenTypes.SL, TokenTypes.SL_ASSIGN, TokenTypes.EQUAL, TokenTypes.NOT_EQUAL
 				, TokenTypes.BAND, TokenTypes.BAND_ASSIGN, TokenTypes.BNOT, TokenTypes.BOR, TokenTypes.BOR_ASSIGN,
 				TokenTypes.BXOR, TokenTypes.BXOR_ASSIGN,TokenTypes.LOR, TokenTypes.LNOT, TokenTypes.QUESTION, TokenTypes.COLON,
-				TokenTypes.DOT, TokenTypes.STRING_LITERAL };
+				TokenTypes.DOT, TokenTypes.STRING_LITERAL, TokenTypes.LITERAL_WHILE, TokenTypes.LITERAL_FOR, TokenTypes.DO_WHILE };
 	}
 
 	@Override
@@ -46,8 +48,9 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Number of operators " + operators);
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
 		log(rootAST.getLineNo(), "Halstead Length: " + (operators + operands));
-		log(rootAST.getLineNo(), "Halstead Length: " + (uniqOps.size() + uniqOperands.size()));
+		log(rootAST.getLineNo(), "Halstead Vocab: " + (uniqOps.size() + uniqOperands.size()));
 		log(rootAST.getLineNo(), "Expressions: " + expressions);
+		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
 		log(rootAST.getLineNo(), "Identities : " + list);
 
 	}
@@ -92,9 +95,20 @@ public class StructuralMetricsCheck extends AbstractCheck {
 			if(!uniqOperands.containsKey(aAST.getText()))
 			{
 				uniqOperands.put(aAST.getText(), 1);
+				list += " " + aAST.getText();
 			}
-		}	 
+		}
 		
+		if(isLoop(aAST)) {
+			loops += 1;
+		}
+		
+	}
+	
+	private boolean isLoop(DetailAST ast) {
+		return ast.getType() == TokenTypes.LITERAL_WHILE || 
+				ast.getType() == TokenTypes.LITERAL_FOR || 
+				ast.getType() == TokenTypes.DO_WHILE;
 	}
 	
 	private boolean isValidIdent(DetailAST ast) {
@@ -257,6 +271,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		// init the variables
 		operators = 0;
 		operands = 0;
+		loops = 0;
 		uniqOps = new HashMap<Integer, Integer>();
 		uniqOperands =  new HashMap<String, Integer>();
 		expressions = 0;
