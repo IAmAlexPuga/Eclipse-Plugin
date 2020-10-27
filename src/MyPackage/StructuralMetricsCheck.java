@@ -47,12 +47,20 @@ public class StructuralMetricsCheck extends AbstractCheck {
 
 	@Override
 	public void finishTree(DetailAST rootAST) {
+		int hLength = operators + operands;
+		double hVocab = uniqOps.size() + uniqOperands.size();
+		double hVolume = hLength * Math.log(hVocab);
+		double hDiff = ((.5*uniqOps.size())* operands )/uniqOps.size();
+		double hEffort = hDiff*hVolume;
 		
 		// logs data for MS1
 		log(rootAST.getLineNo(), "Number of operators " + operators);
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
-		log(rootAST.getLineNo(), "Halstead Length: " + (operators + operands));
-		log(rootAST.getLineNo(), "Halstead Vocab: " + (uniqOps.size() + uniqOperands.size()));
+		log(rootAST.getLineNo(), "Halstead Length: " + hLength );
+		log(rootAST.getLineNo(), "Halstead Vocab: " + hVocab);
+		log(rootAST.getLineNo(), "Halstead Volume: " + hVolume);
+		log(rootAST.getLineNo(), "Halstead Difficulty: " + hDiff);
+		log(rootAST.getLineNo(), "Halstead Effort: " + hEffort);
 		log(rootAST.getLineNo(), "Expressions: " + expressions);
 		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
 		log(rootAST.getLineNo(), "Number of Comments: " + numComments);
