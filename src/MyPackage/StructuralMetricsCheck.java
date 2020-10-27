@@ -10,6 +10,8 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	private int operands = 0;
 	private int expressions = 0;
 	private int loops = 0;
+	private int numComments = 0;
+	private int numLinesComments = 0;
 	private Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
 	private Map<String, Integer> uniqOperands =  new HashMap<String, Integer>();
 	private String list = "";
@@ -32,7 +34,8 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				TokenTypes.LE, TokenTypes.LT, TokenTypes.SL, TokenTypes.SL_ASSIGN, TokenTypes.EQUAL, TokenTypes.NOT_EQUAL
 				, TokenTypes.BAND, TokenTypes.BAND_ASSIGN, TokenTypes.BNOT, TokenTypes.BOR, TokenTypes.BOR_ASSIGN,
 				TokenTypes.BXOR, TokenTypes.BXOR_ASSIGN,TokenTypes.LOR, TokenTypes.LNOT, TokenTypes.QUESTION, TokenTypes.COLON,
-				TokenTypes.DOT, TokenTypes.STRING_LITERAL, TokenTypes.LITERAL_WHILE, TokenTypes.LITERAL_FOR, TokenTypes.DO_WHILE };
+				TokenTypes.DOT, TokenTypes.STRING_LITERAL, TokenTypes.LITERAL_WHILE, TokenTypes.LITERAL_FOR, TokenTypes.DO_WHILE,
+				TokenTypes.SINGLE_LINE_COMMENT, TokenTypes.BLOCK_COMMENT_BEGIN};
 	}
 
 	@Override
@@ -51,6 +54,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Halstead Vocab: " + (uniqOps.size() + uniqOperands.size()));
 		log(rootAST.getLineNo(), "Expressions: " + expressions);
 		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
+		log(rootAST.getLineNo(), "Number of Comments: " + numComments);
 		log(rootAST.getLineNo(), "Identities : " + list);
 
 	}
@@ -103,8 +107,16 @@ public class StructuralMetricsCheck extends AbstractCheck {
 			loops += 1;
 		}
 		
+		if(isComment(aAST)) {
+			numComments += 1;
+		}
+		
 	}
-	
+	private boolean isComment(DetailAST ast) {
+		return ast.getParent().getType() != TokenTypes.BLOCK_COMMENT_BEGIN && 
+				(ast.getType() == TokenTypes.SINGLE_LINE_COMMENT ||
+				ast.getType() == TokenTypes.BLOCK_COMMENT_BEGIN);
+	}
 	private boolean isLoop(DetailAST ast) {
 		return ast.getType() == TokenTypes.LITERAL_WHILE || 
 				ast.getType() == TokenTypes.LITERAL_FOR || 
@@ -267,6 +279,11 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	}
 
 	@Override
+	public boolean isCommentNodesRequired() {
+		return true;
+	}
+	
+	@Override
 	public void beginTree(DetailAST rootAST) {
 		// init the variables
 		operators = 0;
@@ -275,6 +292,8 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		uniqOps = new HashMap<Integer, Integer>();
 		uniqOperands =  new HashMap<String, Integer>();
 		expressions = 0;
+		numComments = 0;
+		numLinesComments = 0;
 		
 	}
 	
