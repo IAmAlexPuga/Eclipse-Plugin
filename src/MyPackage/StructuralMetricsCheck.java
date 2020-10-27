@@ -10,7 +10,8 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	private int operands = 0;
 	private int expressions = 0;
 	private Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
-	
+	private Map<String, Integer> uniqOperands =  new HashMap<String, Integer>();
+	private String list = "";
 	 @Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
 		 return getAcceptableTokens();
@@ -28,7 +29,8 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				TokenTypes.DEC, TokenTypes.POST_DEC, TokenTypes.GE, TokenTypes.GT, TokenTypes.SR, TokenTypes.SR_ASSIGN,
 				TokenTypes.LE, TokenTypes.LT, TokenTypes.SL, TokenTypes.SL_ASSIGN, TokenTypes.EQUAL, TokenTypes.NOT_EQUAL
 				, TokenTypes.BAND, TokenTypes.BAND_ASSIGN, TokenTypes.BNOT, TokenTypes.BOR, TokenTypes.BOR_ASSIGN,
-				TokenTypes.BXOR, TokenTypes.BXOR_ASSIGN,TokenTypes.LOR, TokenTypes.LNOT, TokenTypes.QUESTION, TokenTypes.COLON };
+				TokenTypes.BXOR, TokenTypes.BXOR_ASSIGN,TokenTypes.LOR, TokenTypes.LNOT, TokenTypes.QUESTION, TokenTypes.COLON,
+				TokenTypes.DOT, TokenTypes.STRING_LITERAL };
 	}
 
 	@Override
@@ -44,8 +46,9 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Number of operators " + operators);
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
 		log(rootAST.getLineNo(), "Halstead Length: " + (operators + operands));
-		log(rootAST.getLineNo(), "Unique Operators: " + uniqOps.size());
+		log(rootAST.getLineNo(), "Halstead Length: " + (uniqOps.size() + uniqOperands.size()));
 		log(rootAST.getLineNo(), "Expressions: " + expressions);
+		log(rootAST.getLineNo(), "Identities : " + list);
 
 	}
 
@@ -70,8 +73,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		// checks if its a number 
 		if(checkNum(aAST) && (aAST.getParent().getType() ==TokenTypes.EXPR || checkOperator(aAST.getParent()))) {
 			operands += 1; 
-		}
-				 
+		} 
 				
 		// checks if its an operator 
 		if(checkOperator(aAST)) { 
@@ -85,8 +87,36 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		if(checkExpression(aAST)) {
 			expressions += 1;
 		}
-				 
 		
+		if(isValidIdent(aAST)) {
+			if(!uniqOperands.containsKey(aAST.getText()))
+			{
+				uniqOperands.put(aAST.getText(), 1);
+			}
+		}	 
+		
+	}
+	
+	private boolean isValidIdent(DetailAST ast) {
+		if( checkIdent(ast) || checkIdentVar(ast) ) {
+		//if( checkIdentVar(ast) ) {
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean checkIdent(DetailAST ast) {
+		
+		// idk if class def should be included or not
+		// assuming imports ok
+		return ast.getType() == TokenTypes.IDENT && ast.getType() != TokenTypes.CLASS_DEF && (
+				ast.getParent().getType() == TokenTypes.DOT || 
+				ast.getParent().getType() == TokenTypes.VARIABLE_DEF ||
+				ast.getParent().getType() == TokenTypes.METHOD_DEF);
+	}
+	
+	private boolean checkIdentVar(DetailAST ast) {
+		return !checkOperator(ast) && ast.getType() != TokenTypes.IDENT && !checkExpression(ast) && ( checkOperator(ast.getParent()) || checkExpression(ast.getParent()) );
 	}
 	
 	private boolean checkExpression(DetailAST ast) {
@@ -121,8 +151,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	}
 	
 	private int convertUniqueOp(DetailAST ast) {
-		int type = ast.getType();
-		//list += " " + type;
+		// can use check operator then just return ast.getType()
 		// checks what op the ast type is
 		switch(ast.getType()) {
 		case TokenTypes.PLUS:
@@ -229,6 +258,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		operators = 0;
 		operands = 0;
 		uniqOps = new HashMap<Integer, Integer>();
+		uniqOperands =  new HashMap<String, Integer>();
 		expressions = 0;
 		
 	}
