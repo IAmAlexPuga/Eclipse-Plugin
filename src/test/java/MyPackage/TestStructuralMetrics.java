@@ -101,14 +101,12 @@ class TestStructuralMetrics {
 		DetailAstImpl test =  new DetailAstImpl();
 		test.setType(TokenTypes.EXPR);
 		Mockito.doReturn(test).when(mockAST).getParent();
-		//Mockito.doReturn(TokenTypes.EXPR).when(mockAST).getParent().getType();
 
 		for(int tok : comTokens) {
 			Mockito.doReturn(tok).when(mockAST).getType();
 			assertTrue(spyStr.isComment(mockAST));
 		}
-		//Mockito.doReturn(test).when(mockAST).getParent();
-		//Mockito.doReturn(TokenTypes.BLOCK_COMMENT_BEGIN).when(mockAST).getParent().getType();
+		
 		Mockito.doReturn(TokenTypes.STAR).when(mockAST).getType();
 		assertFalse(spyStr.isComment(mockAST));
 		
