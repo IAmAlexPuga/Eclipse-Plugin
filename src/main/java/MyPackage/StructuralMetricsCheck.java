@@ -134,7 +134,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		bcls = -1;
 	}
 	
-	private boolean isComment(DetailAST ast) {
+	public boolean isComment(DetailAST ast) {
 		return ast.getParent().getType() != TokenTypes.BLOCK_COMMENT_BEGIN && 
 				(ast.getType() == TokenTypes.SINGLE_LINE_COMMENT ||
 				ast.getType() == TokenTypes.BLOCK_COMMENT_BEGIN);
@@ -184,7 +184,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				|| ast.getType() ==TokenTypes.COLON;
 	}
 
-	private boolean checkNum(DetailAST ast) {
+	public boolean checkNum(DetailAST ast) {
 		return ast.getType() == TokenTypes.NUM_INT || ast.getType() == TokenTypes.NUM_DOUBLE
 				|| ast.getType() == TokenTypes.NUM_FLOAT || ast.getType() == TokenTypes.NUM_LONG
 				|| ast.getType() == TokenTypes.IDENT;

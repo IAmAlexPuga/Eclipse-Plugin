@@ -1,18 +1,27 @@
 package MyPackage;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.Mockito.*;
 
+import com.puppycrawl.tools.checkstyle.DetailAstImpl;
+import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 class TestStructuralMetrics {
 
 	StructuralMetricsCheck mockStr = mock(StructuralMetricsCheck.class);
 	StructuralMetricsCheck spyStr= spy(new StructuralMetricsCheck());
+	DetailAST mockAST = mock(DetailAST.class);
+	
 	int[] tokens = {TokenTypes.PLUS, TokenTypes.MINUS, TokenTypes.MOD, 
 			TokenTypes.DIV,TokenTypes.STAR , TokenTypes.VARIABLE_DEF, 
 			TokenTypes.NUM_INT, TokenTypes.ASSIGN, TokenTypes.EXPR, TokenTypes.IDENT,
@@ -23,11 +32,10 @@ class TestStructuralMetrics {
 			, TokenTypes.BAND, TokenTypes.BAND_ASSIGN, TokenTypes.BNOT, TokenTypes.BOR, TokenTypes.BOR_ASSIGN,
 			TokenTypes.BXOR, TokenTypes.BXOR_ASSIGN,TokenTypes.LOR, TokenTypes.LNOT, TokenTypes.QUESTION, TokenTypes.COLON,
 			TokenTypes.DOT, TokenTypes.STRING_LITERAL, TokenTypes.LITERAL_WHILE, TokenTypes.LITERAL_FOR, TokenTypes.DO_WHILE,
-			TokenTypes.SINGLE_LINE_COMMENT, TokenTypes.BLOCK_COMMENT_BEGIN, TokenTypes.COMMENT_CONTENT, TokenTypes.BLOCK_COMMENT_END};
-	;
+			TokenTypes.SINGLE_LINE_COMMENT, TokenTypes.BLOCK_COMMENT_BEGIN, TokenTypes.COMMENT_CONTENT, TokenTypes.BLOCK_COMMENT_END};;
+			
 	@BeforeEach
 	void setUp() throws Exception {
-
 	}
 
 	@Test
@@ -57,6 +65,54 @@ class TestStructuralMetrics {
 		assertArrayEquals(tokens, spyStr.getRequiredTokens());
 		assertArrayEquals(spyStr.getRequiredTokens(), spyStr.getAcceptableTokens());
 		assertArrayEquals(spyStr.getRequiredTokens(), spyStr.getDefaultTokens());
+	}
+	
+	@Test
+	void computeBCCountTest() {
+		
+		//Mockito.doReturn("Type").when(mockAST).getParent();
+		
+		assertTrue(true);
+		
+	}
+	
+	@Test
+	void checkNumTest() {
+		
+		int[] numTokens = {TokenTypes.NUM_INT ,TokenTypes.NUM_DOUBLE,TokenTypes.NUM_FLOAT , TokenTypes.NUM_LONG,TokenTypes.IDENT};
+		
+		for(int tok : numTokens) {
+			Mockito.doReturn(tok).when(mockAST).getType();
+			assertTrue(spyStr.checkNum(mockAST));
+
+		}
+		
+		Mockito.doReturn(TokenTypes.BOR_ASSIGN).when(mockAST).getType();
+		assertFalse(spyStr.checkNum(mockAST));
+		Mockito.doReturn(TokenTypes.ANNOTATION).when(mockAST).getType();
+		assertFalse(spyStr.checkNum(mockAST));
+
+
+	}
+	
+	@Test
+	void isCommentTest() {
+		int[] comTokens = {TokenTypes.SINGLE_LINE_COMMENT,TokenTypes.BLOCK_COMMENT_BEGIN};
+		DetailAstImpl test =  new DetailAstImpl();
+		test.setType(TokenTypes.EXPR);
+		Mockito.doReturn(test).when(mockAST).getParent();
+		//Mockito.doReturn(TokenTypes.EXPR).when(mockAST).getParent().getType();
+
+		for(int tok : comTokens) {
+			Mockito.doReturn(tok).when(mockAST).getType();
+			assertTrue(spyStr.isComment(mockAST));
+		}
+		//Mockito.doReturn(test).when(mockAST).getParent();
+		//Mockito.doReturn(TokenTypes.BLOCK_COMMENT_BEGIN).when(mockAST).getParent().getType();
+		Mockito.doReturn(TokenTypes.STAR).when(mockAST).getType();
+		assertFalse(spyStr.isComment(mockAST));
+		
+		
 	}
 
 }
