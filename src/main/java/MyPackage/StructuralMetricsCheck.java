@@ -208,24 +208,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		
 	}
 
-	
-	private int traverse(DetailAST ast) {
-		if (ast == null) {
-			return 0;
-		}
-
-		if (checkOperator(ast)) {
-			return 1 + traverse(ast.getNextSibling()) + traverse(ast.getFirstChild());
-
-		} else if (checkNum(ast)) {
-			operands += 1;
-			return traverse(ast.getNextSibling()) + traverse(ast.getFirstChild());
-
-		}
-
-		return traverse(ast.getNextSibling()) + traverse(ast.getFirstChild());
-	}
-
 	@Override
 	public boolean isCommentNodesRequired() {
 		return true;
