@@ -128,7 +128,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	}
 	
 	
-	private void computeBCCount() {
+	public void computeBCCount() {
 		numLinesComments += (bcle - bcls);
 		bcle = -1;
 		bcls = -1;
@@ -139,21 +139,20 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				(ast.getType() == TokenTypes.SINGLE_LINE_COMMENT ||
 				ast.getType() == TokenTypes.BLOCK_COMMENT_BEGIN);
 	}
-	private boolean isLoop(DetailAST ast) {
+	public boolean isLoop(DetailAST ast) {
 		return ast.getType() == TokenTypes.LITERAL_WHILE || 
 				ast.getType() == TokenTypes.LITERAL_FOR || 
 				ast.getType() == TokenTypes.DO_WHILE;
 	}
 	
-	private boolean isValidIdent(DetailAST ast) {
+	public boolean isValidIdent(DetailAST ast) {
 		if( checkIdent(ast) || checkIdentVar(ast) ) {
-		//if( checkIdentVar(ast) ) {
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean checkIdent(DetailAST ast) {
+	public boolean checkIdent(DetailAST ast) {
 		
 		// idk if class def should be included or not
 		// assuming imports ok
@@ -163,15 +162,15 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				ast.getParent().getType() == TokenTypes.METHOD_DEF);
 	}
 	
-	private boolean checkIdentVar(DetailAST ast) {
+	public boolean checkIdentVar(DetailAST ast) {
 		return !checkOperator(ast) && ast.getType() != TokenTypes.IDENT && !checkExpression(ast) && ( checkOperator(ast.getParent()) || checkExpression(ast.getParent()) );
 	}
 	
-	private boolean checkExpression(DetailAST ast) {
+	public boolean checkExpression(DetailAST ast) {
 		return ast.getType() == TokenTypes.EXPR;
 	}
 
-	private boolean checkOperator(DetailAST ast) {
+	public boolean checkOperator(DetailAST ast) {
 		return ast.getType() == TokenTypes.PLUS || ast.getType() == TokenTypes.MINUS || ast.getType() == TokenTypes.STAR
 				|| ast.getType() == TokenTypes.DIV || ast.getType() == TokenTypes.MOD || ast.getType() == TokenTypes.PLUS_ASSIGN 
 				|| ast.getType() == TokenTypes.MINUS_ASSIGN || ast.getType() == TokenTypes.DIV_ASSIGN || ast.getType() == TokenTypes.ASSIGN
@@ -190,7 +189,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				|| ast.getType() == TokenTypes.IDENT;
 	}
 	
-	private void addUniqueOps(DetailAST ast) {
+	public void addUniqueOps(DetailAST ast) {
 		int key = convertUniqueOp(ast);
 		// makes sure key is non negative and uniqOps does not contain key
 		if(key != -1 && !uniqOps.containsKey(key)) {
@@ -198,7 +197,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		}
 	}
 	
-	private int convertUniqueOp(DetailAST ast) {
+	public int convertUniqueOp(DetailAST ast) {
 		// can use check operator then just return ast.getType()
 		if(checkOperator(ast)) {
 			return ast.getType();

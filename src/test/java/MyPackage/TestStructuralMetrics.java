@@ -171,5 +171,24 @@ class TestStructuralMetrics {
 		Mockito.doReturn(TokenTypes.STAR).when(mockAST).getType();
 		assertFalse(spyStr.isComment(mockAST));
 	}
+	
+	@Test
+	void isLoopTest() {
+		int[] comTokens = { TokenTypes.LITERAL_WHILE,TokenTypes.LITERAL_FOR,TokenTypes.DO_WHILE };
+		
+		for( int tok : comTokens) {
+			Mockito.doReturn(tok).when(mockAST).getType();
+			assertTrue(spyStr.isLoop(mockAST));
+		}
+		
+		Mockito.doReturn(TokenTypes.ASSIGN).when(mockAST).getType();
+		assertFalse(spyStr.isLoop(mockAST));
+	}
+	
+	@Test
+	void isValidIdentTest() {
+		Mockito.doReturn(true).when(spyStr).checkIdent(mockAST);
+		Mockito.doReturn(false).when(spyStr).checkIdentVar(mockAST);
+	}
 
 }
