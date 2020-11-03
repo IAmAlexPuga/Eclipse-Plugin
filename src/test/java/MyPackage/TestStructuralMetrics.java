@@ -189,6 +189,39 @@ class TestStructuralMetrics {
 	void isValidIdentTest() {
 		Mockito.doReturn(true).when(spyStr).checkIdent(mockAST);
 		Mockito.doReturn(false).when(spyStr).checkIdentVar(mockAST);
+		assertTrue(spyStr.isValidIdent(mockAST));
+		
+		Mockito.doReturn(false).when(spyStr).checkIdent(mockAST);
+		Mockito.doReturn(true).when(spyStr).checkIdentVar(mockAST);
+		assertTrue(spyStr.isValidIdent(mockAST));
+		
+		Mockito.doReturn(false).when(spyStr).checkIdent(mockAST);
+		Mockito.doReturn(false).when(spyStr).checkIdentVar(mockAST);
+		assertFalse(spyStr.isValidIdent(mockAST));
+		
+	}
+	
+	@Test
+	void checkIdentTest() {
+		int[] comTokens = { TokenTypes.DOT ,TokenTypes.VARIABLE_DEF, TokenTypes.METHOD_DEF};
+		DetailAstImpl test = new DetailAstImpl();
+		Mockito.doReturn(TokenTypes.IDENT).when(mockAST).getType();
+		
+		for(int tok : comTokens) {
+			test.setType(tok);
+			Mockito.doReturn(test).when(mockAST).getParent();
+			assertTrue(spyStr.checkIdent(mockAST));
+		}
+		
+		test.setType(TokenTypes.ANNOTATION);
+		Mockito.doReturn(test).when(mockAST).getParent();
+		assertFalse(spyStr.checkIdent(mockAST));
+		
+		test.setType(TokenTypes.DOT);
+		Mockito.doReturn(test).when(mockAST).getParent();
+		Mockito.doReturn(TokenTypes.ARRAY_INIT).when(mockAST).getType();
+		assertFalse(spyStr.checkIdent(mockAST));
+		
 	}
 
 }

@@ -163,7 +163,8 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	}
 	
 	public boolean checkIdentVar(DetailAST ast) {
-		return !checkOperator(ast) && ast.getType() != TokenTypes.IDENT && !checkExpression(ast) && ( checkOperator(ast.getParent()) || checkExpression(ast.getParent()) );
+		return !checkOperator(ast) && ast.getType() != TokenTypes.IDENT && !checkExpression(ast) &&
+				( checkOperator(ast.getParent()) || checkExpression(ast.getParent()) );
 	}
 	
 	public boolean checkExpression(DetailAST ast) {
