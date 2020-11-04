@@ -16,6 +16,11 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	public int bcle = -1;
 	public Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
 	public Map<String, Integer> uniqOperands =  new HashMap<String, Integer>();
+	int hLength = 0;
+	double hVocab = 0;
+	double hVolume = 0;
+	double hDiff = 0;
+	double hEffort = 0;
 	 
 	@Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
@@ -47,11 +52,11 @@ public class StructuralMetricsCheck extends AbstractCheck {
 
 	@Override
 	public void finishTree(DetailAST rootAST) {
-		int hLength = operators + operands;
-		double hVocab = uniqOps.size() + uniqOperands.size();
-		double hVolume = hLength * Math.log(hVocab);
-		double hDiff = ((.5*uniqOps.size())* operands )/uniqOps.size();
-		double hEffort = hDiff*hVolume;
+		hLength = operators + operands;
+		hVocab = uniqOps.size() + uniqOperands.size();
+		hVolume = hLength * Math.log(hVocab);
+		hDiff = ((.5*uniqOps.size())* operands )/uniqOps.size();
+		hEffort = hDiff*hVolume;
 		
 		
 		// logs data for MS1
@@ -66,6 +71,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
 		log(rootAST.getLineNo(), "Number of Comments: " + numComments);
 		log(rootAST.getLineNo(), "Number of Lines Of Comments: " + (numLinesComments + numComments));
+		
 
 	}
 
@@ -226,7 +232,11 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		numLinesComments = 0;
 		bcls = -1;
 		bcle = -1;
-		
+		hLength = 0;
+		hVocab = 0;
+		hVolume = 0;
+		hDiff = 0;
+		hEffort = 0;
 	}
 	
 

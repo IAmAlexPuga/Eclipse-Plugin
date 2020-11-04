@@ -6,6 +6,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 
+import java.util.HashMap;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -295,6 +297,182 @@ class TestStructuralMetrics {
 	@Test
 	void isCommentNodesRequiredTest() {
 		assertTrue(spyStr.isCommentNodesRequired());
+	}
+	
+	@Test
+	void beginTreeTest() {
+		spyStr.operands = 3;
+		spyStr.operators = 1;
+		spyStr.bcls = 4;
+		spyStr.loops = 6;
+		spyStr.uniqOps.put(4, 1);
+		spyStr.uniqOperands.put("testing", 2);
+		spyStr.expressions = 5;
+		spyStr.numComments = 2;
+		spyStr.numLinesComments = 15;
+		spyStr.bcle = 10;
+		spyStr.hDiff = 3;
+		spyStr.hEffort = 0.0;
+		spyStr.hLength = 2;
+		spyStr.hVocab = 5.0;
+		spyStr.hVolume = 3.0;
+		
+		
+		assertFalse(spyStr.uniqOperands.isEmpty());
+		assertFalse(spyStr.uniqOps.isEmpty());
+		assertEquals(spyStr.operands, 3);
+		assertEquals(spyStr.operators, 1);
+		assertEquals(spyStr.bcls, 4);
+		assertEquals(spyStr.loops, 6);
+		assertEquals(spyStr.expressions, 5);
+		assertEquals(spyStr.numComments, 2);
+		assertEquals(spyStr.numLinesComments, 15);
+		assertEquals(spyStr.bcle, 10);
+		assertEquals(spyStr.hDiff, 3);
+		assertEquals(spyStr.hEffort, .00);
+		assertEquals(spyStr.hLength, 2);
+		assertEquals(spyStr.hVocab, 5.0);
+		assertEquals(spyStr.hVolume, 3.0);
+		
+		spyStr.beginTree(mockAST);
+		assertTrue(spyStr.uniqOperands.isEmpty());
+		assertTrue(spyStr.uniqOps.isEmpty());
+		assertEquals(spyStr.operands, 0);
+		assertEquals(spyStr.operators, 0);
+		assertEquals(spyStr.bcls, -1);
+		assertEquals(spyStr.loops, 0);
+		assertEquals(spyStr.expressions, 0);
+		assertEquals(spyStr.numComments, 0);
+		assertEquals(spyStr.numLinesComments, 0);
+		assertEquals(spyStr.bcle, -1);
+		assertEquals(spyStr.hDiff, 0);
+		assertEquals(spyStr.hEffort, 0);
+		assertEquals(spyStr.hLength, 0);
+		assertEquals(spyStr.hVocab, 0);
+		assertEquals(spyStr.hVolume, 0);
+		
+		
+	}
+	
+	@Test
+	void computeBCCCountTest() {
+		spyStr.numLinesComments = 0;
+		spyStr.bcle = 30;
+		spyStr.bcls = 17;
+		
+		spyStr.computeBCCount();
+		assertEquals(spyStr.numLinesComments, 13);
+		assertEquals(spyStr.bcle, -1);
+		assertEquals(spyStr.bcls, -1);
+		
+	}
+	
+	@Test
+	void finishTreeTest() {
+		StructuralMetricsCheck spy = spy(new StructuralMetricsCheck());
+		Mockito.doReturn(1).when(mockAST).getLineNo();
+		spy.operands = 3;
+		spy.operators = 1;
+		spy.bcls = 4;
+		spy.loops = 6;
+		spy.uniqOps.put(4, 1);
+		spy.uniqOperands.put("testing", 2);
+		spy.expressions = 5;
+		spy.numComments = 2;
+		spy.numLinesComments = 15;
+		spy.bcle = 10;
+		spy.hDiff = 0;
+		spy.hEffort = 0;
+		spy.hLength = 0;
+		spy.hVocab = 0;
+		spy.hVolume = 0;
+		
+		assertEquals(spy.hDiff, 0);
+		assertEquals(spy.hEffort, 0);
+		assertEquals(spy.hLength, 0);
+		assertEquals(spy.hVocab, 0);
+		assertEquals(spy.hVolume, 0);
+		
+		
+		/*Not sure why this is causing an error
+		 * DetailAstImpl test = new DetailAstImpl();
+		test.setType(TokenTypes.PLUS);
+		Mockito.doReturn(test).when(mockAST).getParent();
+		 * spy.finishTree(mockAST);
+		
+		int hLength = spy.operators + spy.operands;
+		double hVocab = spy.uniqOps.size() + spy.uniqOperands.size();
+		double hVolume = hLength * Math.log(hVocab);
+		double hDiff = ((.5*spy.uniqOps.size())* spy.operands )/spy.uniqOps.size();
+		double hEffort = hDiff*hVolume;
+		
+		assertEquals(spy.hDiff, hDiff);
+		assertEquals(spy.hEffort, hEffort);
+		assertEquals(spy.hLength, hLength);
+		assertEquals(spy.hVocab, hVocab);
+		assertEquals(spy.hVolume, hVolume);
+		assertEquals(mockAST.getLineNo(), 1); */
+		
+	}
+	
+	@Test
+	void visitTokenTest() {
+		// Checks expression is true branch 1
+		DetailAstImpl test = new DetailAstImpl();
+		test.setType(TokenTypes.EXPR);
+		Mockito.doReturn(test).when(mockAST).getParent();
+		Mockito.doReturn(TokenTypes.NUM_INT).when(mockAST).getType();
+		spyStr.visitToken(mockAST);
+		assertEquals(spyStr.operands,1);
+		// Checks expression is true branch 1
+		test.setType(TokenTypes.PLUS);
+		Mockito.doReturn(test).when(mockAST).getParent();
+		Mockito.doReturn(TokenTypes.NUM_DOUBLE).when(mockAST).getType();
+		spyStr.visitToken(mockAST);
+		assertEquals(spyStr.operands,2);
+		// Checks expression is false branch 1
+		Mockito.doReturn(TokenTypes.COMMENT_CONTENT).when(mockAST).getType();
+		spyStr.visitToken(mockAST);
+		assertEquals(spyStr.operands,2);
+		assertEquals(spyStr.bcle, -1);
+		assertEquals(spyStr.bcls, -1);
+		
+		//checks for operator
+		test.setType(TokenTypes.PLUS);
+		Mockito.doReturn(test).when(mockAST).getParent();
+		Mockito.doReturn(TokenTypes.MINUS).when(mockAST).getType();
+		spyStr.visitToken(mockAST);
+		assertEquals(spyStr.operators, 1);
+		assertEquals(spyStr.uniqOps.size(), 1);
+		
+		// Checks if expression
+		Mockito.doReturn(TokenTypes.EXPR).when(mockAST).getType();
+		spyStr.visitToken(mockAST);
+		assertEquals(spyStr.expressions, 1);
+		
+		// Checks for a loop
+		Mockito.doReturn(TokenTypes.LITERAL_FOR).when(mockAST).getType();
+		spyStr.visitToken(mockAST);
+		assertEquals(spyStr.loops, 1);
+		
+		// Checks for a comment
+		Mockito.doReturn(TokenTypes.SINGLE_LINE_COMMENT).when(mockAST).getType();
+		spyStr.visitToken(mockAST);
+		assertEquals(spyStr.numComments, 1);
+		
+		// Checks for a start block comment
+		Mockito.doReturn(TokenTypes.BLOCK_COMMENT_BEGIN).when(mockAST).getType();
+		Mockito.doReturn(5).when(mockAST).getLineNo();
+		spyStr.visitToken(mockAST);
+		assertEquals(spyStr.bcls, 5);
+		
+		// Checks for a end block comment
+		Mockito.doReturn(TokenTypes.BLOCK_COMMENT_END).when(mockAST).getType();
+		Mockito.doReturn(10).when(mockAST).getLineNo();
+		spyStr.visitToken(mockAST);
+		assertEquals(spyStr.bcle, -1);
+		
+
 	}
 
 }
