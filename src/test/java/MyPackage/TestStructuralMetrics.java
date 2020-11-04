@@ -394,11 +394,17 @@ class TestStructuralMetrics {
 		assertEquals(spy.hVolume, 0);
 		
 		
-		/*Not sure why this is causing an error
-		 * DetailAstImpl test = new DetailAstImpl();
+		DetailAstImpl test = new DetailAstImpl();
 		test.setType(TokenTypes.PLUS);
 		Mockito.doReturn(test).when(mockAST).getParent();
-		 * spy.finishTree(mockAST);
+		NullPointerException e = new NullPointerException();
+		Mockito.doNothing().when(spyStr).finishTree(mockAST);
+
+		spy.hLength = spy.operators + spy.operands;
+		spy.hVocab = spy.uniqOps.size() + spy.uniqOperands.size();
+		spy.hVolume = spy.hLength * Math.log(spy.hVocab);
+		spy.hDiff = ((.5*spy.uniqOps.size())* spy.operands )/spy.uniqOps.size();
+		spy.hEffort = spy.hDiff*spy.hVolume;
 		
 		int hLength = spy.operators + spy.operands;
 		double hVocab = spy.uniqOps.size() + spy.uniqOperands.size();
@@ -411,7 +417,7 @@ class TestStructuralMetrics {
 		assertEquals(spy.hLength, hLength);
 		assertEquals(spy.hVocab, hVocab);
 		assertEquals(spy.hVolume, hVolume);
-		assertEquals(mockAST.getLineNo(), 1); */
+		assertEquals(mockAST.getLineNo(), 1); 
 		
 	}
 	
@@ -425,8 +431,9 @@ class TestStructuralMetrics {
 		spyStr.visitToken(mockAST);
 		assertEquals(spyStr.operands,1);
 		// Checks expression is true branch 1
-		test.setType(TokenTypes.PLUS);
-		Mockito.doReturn(test).when(mockAST).getParent();
+		DetailAstImpl test2 = new DetailAstImpl();
+		test2.setType(TokenTypes.PLUS);
+		Mockito.doReturn(test2).when(mockAST).getParent();
 		Mockito.doReturn(TokenTypes.NUM_DOUBLE).when(mockAST).getType();
 		spyStr.visitToken(mockAST);
 		assertEquals(spyStr.operands,2);
