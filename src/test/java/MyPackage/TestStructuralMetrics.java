@@ -223,5 +223,78 @@ class TestStructuralMetrics {
 		assertFalse(spyStr.checkIdent(mockAST));
 		
 	}
+	
+	@Test
+	void checkIdentVarTest() {
+		
+		DetailAstImpl test = new DetailAstImpl();
+		test.setType(TokenTypes.PLUS);
+		Mockito.doReturn(test).when(mockAST).getParent();
+		Mockito.doReturn(TokenTypes.NUM_DOUBLE).when(mockAST).getType();
+		assertTrue(spyStr.checkIdentVar(mockAST));
+		
+		Mockito.doReturn(TokenTypes.IDENT).when(mockAST).getType();
+		assertFalse(spyStr.checkIdentVar(mockAST));
+		
+	}
+	
+	@Test
+	void checkExpressionTest() {
+		Mockito.doReturn(TokenTypes.EXPR).when(mockAST).getType();
+		assertTrue(spyStr.checkExpression(mockAST));
+		
+		Mockito.doReturn(TokenTypes.EXTENDS_CLAUSE).when(mockAST).getType();
+		assertFalse(spyStr.checkExpression(mockAST));
+		
+	}
+	
+	@Test
+	void checkOperatorTest() {
+		int[] comTokens = {TokenTypes.PLUS ,   TokenTypes.MINUS ,   TokenTypes.STAR
+				,   TokenTypes.DIV ,   TokenTypes.MOD ,   TokenTypes.PLUS_ASSIGN 
+				,   TokenTypes.MINUS_ASSIGN ,   TokenTypes.DIV_ASSIGN ,   TokenTypes.ASSIGN
+				,   TokenTypes.STAR_ASSIGN ,   TokenTypes.MOD_ASSIGN ,   TokenTypes.INC
+				,  TokenTypes.POST_INC ,   TokenTypes.DEC ,   TokenTypes.POST_DEC ,   TokenTypes.GE
+				,   TokenTypes.GT ,   TokenTypes.SR ,   TokenTypes.SR_ASSIGN ,   TokenTypes.LE ,   TokenTypes.LT
+				,  TokenTypes.SL ,   TokenTypes.SL_ASSIGN ,   TokenTypes.EQUAL ,   TokenTypes.NOT_EQUAL
+				,  TokenTypes.BAND ,   TokenTypes.BAND_ASSIGN ,   TokenTypes.BNOT ,   TokenTypes.BOR ,   TokenTypes.BOR_ASSIGN
+				,   TokenTypes.BXOR ,   TokenTypes.BXOR_ASSIGN ,   TokenTypes.LOR ,   TokenTypes.LNOT ,   TokenTypes.QUESTION
+				,  TokenTypes.COLON };
+		
+		for(int tok : comTokens) {
+			Mockito.doReturn(tok).when(mockAST).getType();
+			assertTrue(spyStr.checkOperator(mockAST));
+		}
+		
+		Mockito.doReturn(TokenTypes.COMMENT_CONTENT).when(mockAST).getType();
+		assertFalse(spyStr.checkOperator(mockAST));
+		
+	}
+	
+	@Test
+	void addUniqueOpsTest() {
+		Mockito.doReturn(TokenTypes.PLUS).when(mockAST).getType();
+		spyStr.addUniqueOps(mockAST);
+		assertTrue(spyStr.uniqOps.containsKey(TokenTypes.PLUS));
+		assertTrue(spyStr.uniqOps.size() == 1);
+		spyStr.addUniqueOps(mockAST);
+		assertTrue(spyStr.uniqOps.size() == 1);
+		
+		Mockito.doReturn(TokenTypes.SINGLE_LINE_COMMENT).when(mockAST).getType();
+		assertTrue(spyStr.uniqOps.size() == 1);
+	}
+	
+	@Test
+	void convertUniqueOpTest() {
+		Mockito.doReturn(TokenTypes.PLUS_ASSIGN).when(mockAST).getType();
+		assertTrue(spyStr.convertUniqueOp(mockAST) !=  -1);
+		Mockito.doReturn(TokenTypes.IDENT).when(mockAST).getType();
+		assertTrue(spyStr.convertUniqueOp(mockAST) ==  -1);
+	}
+	
+	@Test
+	void isCommentNodesRequiredTest() {
+		assertTrue(spyStr.isCommentNodesRequired());
+	}
 
 }

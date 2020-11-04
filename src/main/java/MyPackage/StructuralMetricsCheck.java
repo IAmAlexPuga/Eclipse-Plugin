@@ -6,16 +6,16 @@ import java.util.*;
 
 public class StructuralMetricsCheck extends AbstractCheck {
 
-	private int operators = 0;
-	private int operands = 0;
-	private int expressions = 0;
-	private int loops = 0;
-	private int numComments = 0;
-	private int numLinesComments = 0;
-	private int bcls = -1;
-	private int bcle = -1;
-	private Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
-	private Map<String, Integer> uniqOperands =  new HashMap<String, Integer>();
+	public int operators = 0;
+	public int operands = 0;
+	public int expressions = 0;
+	public int loops = 0;
+	public int numComments = 0;
+	public int numLinesComments = 0;
+	public int bcls = -1;
+	public int bcle = -1;
+	public Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
+	public Map<String, Integer> uniqOperands =  new HashMap<String, Integer>();
 	 
 	@Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
@@ -196,7 +196,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		if(key != -1 && !uniqOps.containsKey(key)) {
 			uniqOps.put(key, 1);
 		}
-	}
+	} 
 	
 	public int convertUniqueOp(DetailAST ast) {
 		// can use check operator then just return ast.getType()
