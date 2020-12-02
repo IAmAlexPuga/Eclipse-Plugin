@@ -58,7 +58,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		hDiff = ((.5*uniqOps.size())* operands )/uniqOps.size();
 		hEffort = hDiff*hVolume;
 		
-		
+		// sepeate into function calls
 		// logs data for MS1
 		log(rootAST.getLineNo(), "Number of operators " + operators);
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
@@ -79,7 +79,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	public void visitToken(DetailAST aAST) {
 		
 		// this also works to get operands
-				
+		// add checks if its others not than number like char, strings, ect...		
 		// checks if its a number 
 		if(checkNum(aAST) && (aAST.getParent().getType() ==TokenTypes.EXPR || checkOperator(aAST.getParent()))) {
 			operands += 1; 
