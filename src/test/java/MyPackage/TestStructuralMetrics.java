@@ -19,7 +19,8 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 class TestStructuralMetrics {
-
+	
+	// seperate all into local tests
 	StructuralMetricsCheck mockStr = mock(StructuralMetricsCheck.class);
 	StructuralMetricsCheck spyStr = spy(new StructuralMetricsCheck());
 	DetailAST mockAST = mock(DetailAST.class);
@@ -396,6 +397,7 @@ class TestStructuralMetrics {
 		
 		DetailAstImpl test = new DetailAstImpl();
 		test.setType(TokenTypes.PLUS);
+		//spyStr.finishTree(mockAST);
 		Mockito.doReturn(test).when(mockAST).getParent();
 		NullPointerException e = new NullPointerException();
 		Mockito.doNothing().when(spyStr).finishTree(mockAST);
