@@ -5,10 +5,58 @@ import java.util.*;
 
 public class StructuralMetricsCommentsCheck extends AbstractCheck {
 
-	public int numComments = 0;
-	public int numLinesComments = 0;
-	public int bcls = -1;
-	public int bcle = -1;
+	private int numComments = 0;
+	private int numLinesComments = 0;
+	private int bcls = -1;
+	private int bcle = -1;
+	
+	public int get_bcle() {
+		return this.bcle;
+	}
+	
+	public void set_bcle(int line) {
+		this.bcle = line;
+	}
+	
+	public void reset_bcle() {
+		this.bcle = -1;
+	}
+	
+	public int get_bcls() {
+		return this.bcls;
+	}
+	
+	public void set_bcls(int line) {
+		this.bcls = line;
+	}
+	
+	public void reset_bcls() {
+		this.bcls = -1;
+	}
+	
+	public int getNumComments() {
+		return this.numComments;
+	}
+	
+	public void addNumComments() {
+		this.numComments += 1;
+	}
+	
+	public void resetNumComments() {
+		this.numComments = 0;
+	}
+	
+	public int getNumLinesComments() {
+		return this.numLinesComments;
+	}
+	
+	public void addNumLinesComments(int amount) {
+		this.numLinesComments += amount;
+	}
+	
+	public void resetNumLinesComments() {
+		this.numLinesComments = 0;
+	}
 	 
 	@Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
@@ -31,8 +79,8 @@ public class StructuralMetricsCommentsCheck extends AbstractCheck {
 
 	@Override
 	public void finishTree(DetailAST rootAST) {
-		log(rootAST.getLineNo(), "Number of Comments: " + numComments);
-		log(rootAST.getLineNo(), "Number of Lines Of Comments: " + (numLinesComments + numComments));
+		log(rootAST.getLineNo(), "Number of Comments: " + this.getNumComments());
+		log(rootAST.getLineNo(), "Number of Lines Of Comments: " + (this.getNumLinesComments() + this.getNumComments()));
 	}
 
 	@Override
@@ -40,21 +88,21 @@ public class StructuralMetricsCommentsCheck extends AbstractCheck {
 		
 		// checks for comments
 		if(isComment(aAST)) {
-			numComments += 1;
+			this.addNumComments();
 		}
 		
 		// checks for beg of block comment
 		if(aAST.getType() == TokenTypes.BLOCK_COMMENT_BEGIN) {
-			bcls = aAST.getLineNo();
+			this.set_bcls(aAST.getLineNo());
 		}
 		
 		// checks for end of block comment
 		if(aAST.getType() == TokenTypes.BLOCK_COMMENT_END) {
-			bcle = aAST.getLineNo();
+			this.set_bcle(aAST.getLineNo());
 		}
 		
 		// computes the size of block comment
-		if(bcle != -1 && bcls != -1) {
+		if(this.get_bcle() != -1 && this.get_bcls() != -1) {
 			computeBCCount();
 		}
 		
@@ -62,9 +110,9 @@ public class StructuralMetricsCommentsCheck extends AbstractCheck {
 	
 	
 	public void computeBCCount() {
-		numLinesComments += (bcle - bcls);
-		bcle = -1;
-		bcls = -1;
+		this.addNumLinesComments(bcle - bcls);
+		this.reset_bcle();
+		this.reset_bcls();
 	}
 	
 	public boolean isComment(DetailAST ast) {
@@ -81,10 +129,10 @@ public class StructuralMetricsCommentsCheck extends AbstractCheck {
 	@Override
 	public void beginTree(DetailAST rootAST) {
 		// init the variables
-		numComments = 0;
-		numLinesComments = 0;
-		bcls = -1;
-		bcle = -1;
+		this.reset_bcle();
+		this.reset_bcls();
+		this.resetNumComments();
+		this.resetNumLinesComments();
 	}
 
 }

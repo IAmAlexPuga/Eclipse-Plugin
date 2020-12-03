@@ -4,8 +4,20 @@ import com.puppycrawl.tools.checkstyle.api.*;
 import java.util.regex.Pattern;
 import java.util.*;
 
-public class exprCheck extends AbstractCheck{
-	public int expressions = 0;
+public class StructuralMetricsExpressionCheck extends AbstractCheck{
+	private int expressions = 0;
+	
+	public int getExpressionsCount() {
+		return this.expressions;
+	}
+	
+	public void addExpressionsCount() {
+		this.expressions += 1;
+	}
+	
+	public void resetExpressionsCount() {
+		this.expressions = 0;
+	}
 	 
 	@Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
@@ -26,17 +38,15 @@ public class exprCheck extends AbstractCheck{
 
 	@Override
 	public void finishTree(DetailAST rootAST) {
-		log(rootAST.getLineNo(), "Expressions: " + expressions);
+		log(rootAST.getLineNo(), "Expressions: " + this.getExpressionsCount());
 	}
 
 	@Override
 	public void visitToken(DetailAST aAST) {
 		// checks if token is an expression
 		if(checkExpression(aAST)) {
-			expressions += 1;
+			this.addExpressionsCount();
 		}
-		
-		
 	}
 	
 	public boolean checkExpression(DetailAST ast) {
@@ -46,7 +56,7 @@ public class exprCheck extends AbstractCheck{
 	@Override
 	public void beginTree(DetailAST rootAST) {
 		// init the variables
-		expressions = 0;
+		this.resetExpressionsCount();
 	}
 	
 }

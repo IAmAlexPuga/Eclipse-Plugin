@@ -36,8 +36,7 @@ public class StructuralMetricsCheck extends AbstractCheck {
 				TokenTypes.LE, TokenTypes.LT, TokenTypes.SL, TokenTypes.SL_ASSIGN, TokenTypes.EQUAL, TokenTypes.NOT_EQUAL
 				, TokenTypes.BAND, TokenTypes.BAND_ASSIGN, TokenTypes.BNOT, TokenTypes.BOR, TokenTypes.BOR_ASSIGN,
 				TokenTypes.BXOR, TokenTypes.BXOR_ASSIGN,TokenTypes.LOR, TokenTypes.LNOT, TokenTypes.QUESTION, TokenTypes.COLON,
-				TokenTypes.DOT, TokenTypes.STRING_LITERAL, TokenTypes.LITERAL_WHILE, TokenTypes.LITERAL_FOR, TokenTypes.DO_WHILE,
-				TokenTypes.SINGLE_LINE_COMMENT, TokenTypes.BLOCK_COMMENT_BEGIN, TokenTypes.COMMENT_CONTENT, TokenTypes.BLOCK_COMMENT_END};
+				TokenTypes.DOT, TokenTypes.STRING_LITERAL, TokenTypes.LITERAL_WHILE, TokenTypes.LITERAL_FOR, TokenTypes.DO_WHILE};
 	}
 
 	@Override
@@ -63,7 +62,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Halstead Volume: " + 	String. format("%.2f", hVolume));
 		log(rootAST.getLineNo(), "Halstead Difficulty: " + String. format("%.2f", hDiff));
 		log(rootAST.getLineNo(), "Halstead Effort: " + String. format("%.2f", hEffort));
-		log(rootAST.getLineNo(), "Expressions: " + expressions);
 	}
 
 	@Override
@@ -104,11 +102,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		
 	}
 	
-	public boolean isComment(DetailAST ast) {
-		return ast.getParent().getType() != TokenTypes.BLOCK_COMMENT_BEGIN && 
-				(ast.getType() == TokenTypes.SINGLE_LINE_COMMENT ||
-				ast.getType() == TokenTypes.BLOCK_COMMENT_BEGIN);
-	}
 	public boolean isLoop(DetailAST ast) {
 		return ast.getType() == TokenTypes.LITERAL_WHILE || 
 				ast.getType() == TokenTypes.LITERAL_FOR || 

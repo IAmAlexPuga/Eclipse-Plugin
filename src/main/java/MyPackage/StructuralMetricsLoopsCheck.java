@@ -11,6 +11,14 @@ public class StructuralMetricsLoopsCheck extends AbstractCheck {
 	public int getLoopCount() {
 		return this.loops;
 	}
+	
+	public void addLoopCount() {
+		this.loops += 1;
+	}
+	
+	public void resetLoopCount() {
+		this.loops = 0;
+	}
 	 
 	@Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
@@ -33,7 +41,7 @@ public class StructuralMetricsLoopsCheck extends AbstractCheck {
 	public void finishTree(DetailAST rootAST) {
 		// sepeate into function calls
 		// logs data
-		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
+		log(rootAST.getLineNo(), "Number Looping statements: " + this.getLoopCount());
 	}
 
 	@Override
@@ -41,7 +49,7 @@ public class StructuralMetricsLoopsCheck extends AbstractCheck {
 		
 		// checks for loops
 		if(isLoop(aAST)) {
-			loops += 1;
+			this.addLoopCount();
 		}
 		
 	}
@@ -55,7 +63,7 @@ public class StructuralMetricsLoopsCheck extends AbstractCheck {
 	@Override
 	public void beginTree(DetailAST rootAST) {
 		// init the variables
-		loops = 0;
+		this.resetLoopCount();
 		
 	}
 }
