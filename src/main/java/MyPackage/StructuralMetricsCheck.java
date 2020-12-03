@@ -10,10 +10,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 	public int operands = 0;
 	public int expressions = 0;
 	public int loops = 0;
-	public int numComments = 0;
-	public int numLinesComments = 0;
-	public int bcls = -1;
-	public int bcle = -1;
 	public Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
 	public Map<String, Integer> uniqOperands =  new HashMap<String, Integer>();
 	int hLength = 0;
@@ -68,10 +64,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Halstead Difficulty: " + String. format("%.2f", hDiff));
 		log(rootAST.getLineNo(), "Halstead Effort: " + String. format("%.2f", hEffort));
 		log(rootAST.getLineNo(), "Expressions: " + expressions);
-		log(rootAST.getLineNo(), "Number of Comments: " + numComments);
-		log(rootAST.getLineNo(), "Number of Lines Of Comments: " + (numLinesComments + numComments));
-		
-
 	}
 
 	@Override
@@ -110,33 +102,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 			loops += 1;
 		}
 		
-		// checks for comments
-		if(isComment(aAST)) {
-			numComments += 1;
-		}
-		
-		// checks for beg of block comment
-		if(aAST.getType() == TokenTypes.BLOCK_COMMENT_BEGIN) {
-			bcls = aAST.getLineNo();
-		}
-		
-		// checks for end of block comment
-		if(aAST.getType() == TokenTypes.BLOCK_COMMENT_END) {
-			bcle = aAST.getLineNo();
-		}
-		
-		// computes the size of block comment
-		if(bcle != -1 && bcls != -1) {
-			computeBCCount();
-		}
-		
-	}
-	
-	
-	public void computeBCCount() {
-		numLinesComments += (bcle - bcls);
-		bcle = -1;
-		bcls = -1;
 	}
 	
 	public boolean isComment(DetailAST ast) {
@@ -227,10 +192,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		uniqOps = new HashMap<Integer, Integer>();
 		uniqOperands =  new HashMap<String, Integer>();
 		expressions = 0;
-		numComments = 0;
-		numLinesComments = 0;
-		bcls = -1;
-		bcle = -1;
 		hLength = 0;
 		hVocab = 0;
 		hVolume = 0;

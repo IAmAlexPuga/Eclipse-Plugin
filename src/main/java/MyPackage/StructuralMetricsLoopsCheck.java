@@ -4,7 +4,7 @@ import com.puppycrawl.tools.checkstyle.api.*;
 import java.util.regex.Pattern;
 import java.util.*;
 
-public class StructuralMetricsLoops extends AbstractCheck {
+public class StructuralMetricsLoopsCheck extends AbstractCheck {
 
 	private int loops = 0;
 	
@@ -34,7 +34,6 @@ public class StructuralMetricsLoops extends AbstractCheck {
 		// sepeate into function calls
 		// logs data
 		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
-		System.out.println("asdfddddddddddddddddddddddddddddddddddddddddddddddddd");
 	}
 
 	@Override
