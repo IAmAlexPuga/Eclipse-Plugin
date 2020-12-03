@@ -10,5 +10,9 @@
             <alternative-name internal-name="MyPackage.StructuralMetricsCheck" />
             <description>%StructuralMCheck.desc</description>
         </rule-metadata>
+        <rule-metadata name="%StructuralMCheck.name" internal-name="StructuralMetrics" parent="TreeWalker">
+            <alternative-name internal-name="MyPackage.StructuralMetricsLoops" />
+            <description>%StructuralMCheck.desc</description>
+        </rule-metadata>
     </rule-group-metadata>
 </checkstyle-metadata>

@@ -34,7 +34,6 @@ public class StructuralMetricsLoops extends AbstractCheck {
 		// sepeate into function calls
 		// logs data
 		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
-		System.out.println("asdfddddddddddddddddddddddddddddddddddddddddddddddddd");
 	}
 
 	@Override
