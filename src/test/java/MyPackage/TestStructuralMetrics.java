@@ -300,7 +300,7 @@ class TestStructuralMetrics {
 		assertTrue(spyStr.isCommentNodesRequired());
 	}
 	
-	@Test
+	/*@Test
 	void beginTreeTest() {
 		spyStr.operands = 3;
 		spyStr.operators = 1;
@@ -482,6 +482,6 @@ class TestStructuralMetrics {
 		assertEquals(spyStr.bcle, -1);
 		
 
-	}
+	}*/
 
 }

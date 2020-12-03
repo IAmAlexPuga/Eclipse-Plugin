@@ -5,14 +5,21 @@
 <checkstyle-metadata>
     <rule-group-metadata name="demo check"  priority="1600">
         <description>%My.desc</description>
-
         <rule-metadata name="%StructuralMCheck.name" internal-name="StructuralMetrics" parent="TreeWalker">
             <alternative-name internal-name="MyPackage.StructuralMetricsCheck" />
             <description>%StructuralMCheck.desc</description>
         </rule-metadata>
+        <rule-metadata name="%exprCheck.name" internal-name="expr" parent="TreeWalker">
+            <alternative-name internal-name="MyPackage.exprCheck" />
+            <description>%expr.desc</description>
+        </rule-metadata>
         <rule-metadata name="%StructuralMLoops.name" internal-name="StructuralMetricsLoops" parent="TreeWalker">
             <alternative-name internal-name="MyPackage.StructuralMetricsLoopsCheck" />
             <description>%StructuralMLoops.desc</description>
+        </rule-metadata>
+        <rule-metadata name="%StructuralMComments.name" internal-name="StructuralMetricsComments" parent="TreeWalker">
+            <alternative-name internal-name="MyPackage.StructuralMetricsCommentsCheck" />
+            <description>%StructuralMComments.desc</description>
         </rule-metadata>
     </rule-group-metadata>
 </checkstyle-metadata>
