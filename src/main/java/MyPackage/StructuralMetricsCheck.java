@@ -68,7 +68,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Halstead Difficulty: " + String. format("%.2f", hDiff));
 		log(rootAST.getLineNo(), "Halstead Effort: " + String. format("%.2f", hEffort));
 		log(rootAST.getLineNo(), "Expressions: " + expressions);
-		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
 		log(rootAST.getLineNo(), "Number of Comments: " + numComments);
 		log(rootAST.getLineNo(), "Number of Lines Of Comments: " + (numLinesComments + numComments));
 		
