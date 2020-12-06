@@ -141,7 +141,7 @@ public class MetricsSingleton {
 		return this.uniqOps;
 	}
 	
-	public Map<String, Integer> getUniqueOperators() {
+	public Map<String, Integer> getUniqueOperands() {
 		return this.uniqOperands;
 	}
 	

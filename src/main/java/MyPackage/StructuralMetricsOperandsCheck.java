@@ -1,15 +1,15 @@
 package MyPackage;
+
 import com.puppycrawl.tools.checkstyle.api.*;
 import java.util.regex.Pattern;
 import java.util.*;
 
-public class StructuralMetricsOperatorsCheck extends AbstractCheck {
-	
+
+public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	
 	
 	public static MetricsSingleton metrics = MetricsSingleton.getInstance();
-	
-	
+	 
 	@Override 
 	 public int[] getDefaultTokens() { // TokenTypes.PLUS,
 		 return getAcceptableTokens();
@@ -39,21 +39,13 @@ public class StructuralMetricsOperatorsCheck extends AbstractCheck {
 
 	@Override
 	public void finishTree(DetailAST rootAST) {
-		/*hLength = operators + operands;
-		hVocab = uniqOps.size() + uniqOperands.size();
-		hVolume = hLength * Math.log(hVocab);
-		hDiff = ((.5*uniqOps.size())* operands )/uniqOps.size();
-		hEffort = hDiff*hVolume;*/
 		
 		// sepeate into function calls
 		// logs data for MS1
-		log(rootAST.getLineNo(), "Number of operators " + metrics.getOps());
-		/*log(rootAST.getLineNo(), "Number of operands: " + operands);
-		log(rootAST.getLineNo(), "Halstead Length: " + hLength );
-		log(rootAST.getLineNo(), "Halstead Vocab: " + hVocab);
-		log(rootAST.getLineNo(), "Halstead Volume: " + 	String. format("%.2f", hVolume));
-		log(rootAST.getLineNo(), "Halstead Difficulty: " + String. format("%.2f", hDiff));
-		log(rootAST.getLineNo(), "Halstead Effort: " + String. format("%.2f", hEffort));*/
+		//log(rootAST.getLineNo(), "Number of operators " + operators);
+		log(rootAST.getLineNo(), "Number of operands SS: " + metrics.getOperands());
+		log(rootAST.getLineNo(), "Number of unique operands SS: " + metrics.getUniqueOperands().size());
+	
 	}
 
 	@Override
@@ -62,26 +54,22 @@ public class StructuralMetricsOperatorsCheck extends AbstractCheck {
 		// this also works to get operands
 		// add checks if its others not than number like char, strings, ect...		
 		// checks if its a number 
-		/*
-		 * if(checkNum(aAST) && (aAST.getParent().getType() ==TokenTypes.EXPR ||
-		 * checkOperator(aAST.getParent()))) { operands += 1; }
-		 */ 
+		if(checkNum(aAST) && (aAST.getParent().getType() ==TokenTypes.EXPR || checkOperator(aAST.getParent()))) {
+			metrics.addOperands();
+		} 
 				
-		// checks if its an operator 
-		if(checkOperator(aAST)) { 
-			metrics.addOps();
+		
+		// checks for unique operands 
+		if(isValidIdent(aAST)) {
+			if(!metrics.getUniqueOperands().containsKey(aAST.getText()))
+			{
+				metrics.addUniqueOperands(aAST.getText(), 1);
+			}
 		}
 		
-		// checks if unique operator to add to uniqOps
-		addUniqueOps(aAST);
 		
 	}
 	
-	public boolean isLoop(DetailAST ast) {
-		return ast.getType() == TokenTypes.LITERAL_WHILE || 
-				ast.getType() == TokenTypes.LITERAL_FOR || 
-				ast.getType() == TokenTypes.DO_WHILE;
-	}
 	
 	public boolean isValidIdent(DetailAST ast) {
 		if( checkIdent(ast) || checkIdentVar(ast) ) {
@@ -128,31 +116,15 @@ public class StructuralMetricsOperatorsCheck extends AbstractCheck {
 				|| ast.getType() == TokenTypes.IDENT;
 	}
 	
-	public void addUniqueOps(DetailAST ast) {
-		int key = convertUniqueOp(ast);
-		
-		// makes sure key is non negative and uniqOps does not contain key
-		if(key != -1 && !metrics.getUniqueOps().containsKey(key)) {
-			metrics.addUniqueOps(key, 1);
-		}
-	} 
-	
-	public int convertUniqueOp(DetailAST ast) {
-		// can use check operator then just return ast.getType()
-		if(checkOperator(ast)) {
-			return ast.getType();
-		}
-		
-		return -1;
-		
-	}
-	
 	@Override
 	public void beginTree(DetailAST rootAST) {
 		// init the variables
-		metrics.resetOps();
-		metrics.resetUniqueOps();
-
+		metrics.resetOperands();
+		metrics.resetUniqueOperands();
+		
 	}
+	
+	
+	
 
 }

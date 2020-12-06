@@ -55,8 +55,9 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		
 		// sepeate into function calls
 		// logs data for MS1
-		log(rootAST.getLineNo(), "Number of operators " + operators);
+		//log(rootAST.getLineNo(), "Number of operators " + operators);
 		log(rootAST.getLineNo(), "Number of operands: " + operands);
+		log(rootAST.getLineNo(), "Number of UNIQUE operands: " + uniqOperands.size());
 		log(rootAST.getLineNo(), "Halstead Length: " + hLength );
 		log(rootAST.getLineNo(), "Halstead Vocab: " + hVocab);
 		log(rootAST.getLineNo(), "Halstead Volume: " + 	String. format("%.2f", hVolume));

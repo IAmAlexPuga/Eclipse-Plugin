@@ -25,5 +25,9 @@
             <alternative-name internal-name="MyPackage.StructuralMetricsOperatorsCheck" />
             <description>%StructuralMOps.desc</description>
         </rule-metadata>
+        <rule-metadata name="%StructuralMOperands.name" internal-name="StructuralMetricsOperands" parent="TreeWalker">
+            <alternative-name internal-name="MyPackage.StructuralMetricsOperandsCheck" />
+            <description>%StructuralMOperands.desc</description>
+        </rule-metadata>
     </rule-group-metadata>
 </checkstyle-metadata>
