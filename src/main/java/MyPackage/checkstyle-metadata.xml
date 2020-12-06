@@ -9,8 +9,8 @@
             <alternative-name internal-name="MyPackage.StructuralMetricsCheck" />
             <description>%StructuralMCheck.desc</description>
         </rule-metadata>
-        <rule-metadata name="%exprCheck.name" internal-name="StructuralMetricsExpressoin" parent="TreeWalker">
-            <alternative-name internal-name="MyPackage.StructuralMetricsExpressoinCheck" />
+        <rule-metadata name="%exprCheck.name" internal-name="expr" parent="TreeWalker">
+            <alternative-name internal-name="MyPackage.exprCheck" />
             <description>%expr.desc</description>
         </rule-metadata>
         <rule-metadata name="%StructuralMLoops.name" internal-name="StructuralMetricsLoops" parent="TreeWalker">
@@ -20,6 +20,10 @@
         <rule-metadata name="%StructuralMComments.name" internal-name="StructuralMetricsComments" parent="TreeWalker">
             <alternative-name internal-name="MyPackage.StructuralMetricsCommentsCheck" />
             <description>%StructuralMComments.desc</description>
+        </rule-metadata>
+        <rule-metadata name="%StructuralMOps.name" internal-name="StructuralMetricsOperators" parent="TreeWalker">
+            <alternative-name internal-name="MyPackage.StructuralMetricsOperatorsCheck" />
+            <description>%StructuralMOps.desc</description>
         </rule-metadata>
     </rule-group-metadata>
 </checkstyle-metadata>
