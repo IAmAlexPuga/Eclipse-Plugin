@@ -4,13 +4,20 @@ import com.puppycrawl.tools.checkstyle.api.*;
 import java.util.regex.Pattern;
 import java.util.*;
 
-public class StructuralMetricsLoops extends AbstractCheck {
-	
+public class StructuralMetricsLoopsCheck extends AbstractCheck {
 
 	private int loops = 0;
 	
 	public int getLoopCount() {
 		return this.loops;
+	}
+	
+	public void addLoopCount() {
+		this.loops += 1;
+	}
+	
+	public void resetLoopCount() {
+		this.loops = 0;
 	}
 	 
 	@Override 
@@ -34,7 +41,7 @@ public class StructuralMetricsLoops extends AbstractCheck {
 	public void finishTree(DetailAST rootAST) {
 		// sepeate into function calls
 		// logs data
-		log(rootAST.getLineNo(), "Number Looping statements: " + loops);
+		log(rootAST.getLineNo(), "Number Looping statements: " + this.getLoopCount());
 	}
 
 	@Override
@@ -42,7 +49,7 @@ public class StructuralMetricsLoops extends AbstractCheck {
 		
 		// checks for loops
 		if(isLoop(aAST)) {
-			loops += 1;
+			this.addLoopCount();
 		}
 		
 	}
@@ -56,7 +63,7 @@ public class StructuralMetricsLoops extends AbstractCheck {
 	@Override
 	public void beginTree(DetailAST rootAST) {
 		// init the variables
-		loops = 0;
+		this.resetLoopCount();
 		
 	}
 }

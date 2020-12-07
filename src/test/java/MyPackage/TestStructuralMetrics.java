@@ -159,7 +159,7 @@ class TestStructuralMetrics {
 
 	}
 
-	@Test
+	/*@Test
 	void isCommentTest() {
 		int[] comTokens = { TokenTypes.SINGLE_LINE_COMMENT, TokenTypes.BLOCK_COMMENT_BEGIN };
 		DetailAstImpl test = new DetailAstImpl();
@@ -173,7 +173,7 @@ class TestStructuralMetrics {
 
 		Mockito.doReturn(TokenTypes.STAR).when(mockAST).getType();
 		assertFalse(spyStr.isComment(mockAST));
-	}
+	}*/
 	
 	@Test
 	void isLoopTest() {
@@ -300,7 +300,7 @@ class TestStructuralMetrics {
 		assertTrue(spyStr.isCommentNodesRequired());
 	}
 	
-	@Test
+	/*@Test
 	void beginTreeTest() {
 		spyStr.operands = 3;
 		spyStr.operators = 1;
@@ -482,6 +482,6 @@ class TestStructuralMetrics {
 		assertEquals(spyStr.bcle, -1);
 		
 
-	}
+	}*/
 
 }
