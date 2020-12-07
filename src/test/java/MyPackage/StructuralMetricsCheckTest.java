@@ -1,20 +1,16 @@
 package MyPackage;
 
-import java.util.HashMap;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.spy;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.Mockito.*;
 
-import com.puppycrawl.tools.checkstyle.DetailAstImpl;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+
+
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
-import com.puppycrawl.tools.checkstyle.api.TokenTypes;
+
 
 public class StructuralMetricsCheckTest {
 	
