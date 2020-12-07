@@ -29,6 +29,28 @@ public class MetricsSingleton {
 		return instance;
 	}
 	
+	
+	//Computes halstead metrics
+	public void computeHLength() {
+		this.hLength = this.getOperands() + this.getOps();
+	}
+	
+	public void computeHVocab() {
+		this.hVocab = this.getUniqueOperands().size() + this.getUniqueOps().size();
+	}
+	
+	public void computeHVolume() {
+		this.hVolume = this.getHLength() * Math.log(this.getHVocab());
+	}
+	
+	public void computeHDiff() {
+		this.hDiff = ((.5*this.getUniqueOps().size())* operands )/this.getUniqueOps().size();
+	}
+	
+	public void computeHEffort() {
+		this.hEffort = this.getHDiff()*this.getHVolume();
+	}
+	
 	// Resets vars
 	public void resetOps() {
 		this.operators = 0;

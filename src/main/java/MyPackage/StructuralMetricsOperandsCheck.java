@@ -43,8 +43,8 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 		// sepeate into function calls
 		// logs data for MS1
 		//log(rootAST.getLineNo(), "Number of operators " + operators);
-		log(rootAST.getLineNo(), "Number of operands SS: " + metrics.getOperands());
-		log(rootAST.getLineNo(), "Number of unique operands SS: " + metrics.getUniqueOperands().size());
+		log(rootAST.getLineNo(), "Number of operands: " + metrics.getOperands());
+		log(rootAST.getLineNo(), "Number of unique operands: " + metrics.getUniqueOperands().size());
 	
 	}
 
