@@ -41,10 +41,6 @@ class TestStructuralMetrics {
 	void setUp() throws Exception {
 	}
 
-	@Test
-	void test() {
-		assertTrue(true);
-	}
 
 	@Test
 	void getDefaultTokensTest() {

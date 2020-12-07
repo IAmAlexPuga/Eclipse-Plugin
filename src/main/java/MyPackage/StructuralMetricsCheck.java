@@ -42,11 +42,6 @@ public class StructuralMetricsCheck extends AbstractCheck {
 		log(rootAST.getLineNo(), "Halstead Difficulty: " + String. format("%.2f", metrics.getHDiff()));
 		log(rootAST.getLineNo(), "Halstead Effort: " + String. format("%.2f", metrics.getHEffort()));
 	}
-
-	@Override
-	public void visitToken(DetailAST aAST) {
-		// class used to report the Halstead Metrics. No need to parse data
-	}
 	
 	@Override
 	public void beginTree(DetailAST rootAST) {
