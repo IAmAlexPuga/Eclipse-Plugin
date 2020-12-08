@@ -43,6 +43,7 @@ public class TestStructuralMetricsCommentsCheck {
 		assertEquals(2,spy.getNumComments());
 	}
 	
+	@Test
 	public void set_bcleTest() {
 		StructuralMetricsCommentsCheck spy = spy(new StructuralMetricsCommentsCheck());
 		
@@ -50,6 +51,7 @@ public class TestStructuralMetricsCommentsCheck {
 		assertNotEquals(-1,spy.get_bcle());
 	}
 	
+	@Test
 	public void set_bclsTest() {
 		StructuralMetricsCommentsCheck spy = spy(new StructuralMetricsCommentsCheck());
 		
@@ -57,6 +59,7 @@ public class TestStructuralMetricsCommentsCheck {
 		assertNotEquals(-1,spy.get_bcls());
 	}
 	
+	@Test
 	public void reset_bclsTest() {
 		StructuralMetricsCommentsCheck spy = spy(new StructuralMetricsCommentsCheck());
 		spy.set_bcls(3);
@@ -65,14 +68,16 @@ public class TestStructuralMetricsCommentsCheck {
 		assertEquals(-1,spy.get_bcls());
 	}
 	
+	@Test
 	public void reset_NumCommentsTest() {
 		StructuralMetricsCommentsCheck spy = spy(new StructuralMetricsCommentsCheck());
 		spy.addNumComments();
-		assertEquals(1,spy.get_bcls());
+		assertEquals(1,spy.getNumComments());
 		spy.resetNumComments();
-		assertEquals(0,spy.get_bcls());
+		assertEquals(0,spy.getNumComments());
 	}
 	
+	@Test
 	public void reset_bcleTest() {
 		StructuralMetricsCommentsCheck spy = spy(new StructuralMetricsCommentsCheck());
 		spy.set_bcle(3);
@@ -81,6 +86,7 @@ public class TestStructuralMetricsCommentsCheck {
 		assertEquals(-1,spy.get_bcle());
 	}
 	
+	@Test
 	public void reset_NumLinesCommentsTest() {
 		StructuralMetricsCommentsCheck spy = spy(new StructuralMetricsCommentsCheck());
 		spy.addNumLinesComments(4);
