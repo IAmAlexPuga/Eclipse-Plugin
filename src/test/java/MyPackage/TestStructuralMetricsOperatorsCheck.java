@@ -91,6 +91,13 @@ public class TestStructuralMetricsOperatorsCheck {
 			isTrue = spy.checkOperator(mock);
 			assertTrue(isTrue);
 		}
+		
+		// Reasures a non operator does not return true
+		Mockito.when(mock.getType()).thenReturn(TokenTypes.CHAR_LITERAL);
+		isTrue = spy.checkOperator(mock);
+		assertFalse(isTrue);
+		
+		
 
 	}
 	

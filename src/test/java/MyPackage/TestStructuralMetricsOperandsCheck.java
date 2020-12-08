@@ -170,10 +170,12 @@ public class TestStructuralMetricsOperandsCheck {
 
 		Mockito.doReturn(parent).when(mock).getParent();
 		Mockito.doReturn(TokenTypes.NUM_DOUBLE).when(mock).getType();
-		assertTrue(spy.checkIdentVar(mock));
+		boolean ans = spy.checkIdentVar(mock);
+		assertTrue(ans);
 
 		Mockito.doReturn(TokenTypes.IDENT).when(mock).getType();
-		assertFalse(spy.checkIdentVar(mock));
+		ans = spy.checkIdentVar(mock);
+		assertFalse(ans);
 	}
 
 	@Test
