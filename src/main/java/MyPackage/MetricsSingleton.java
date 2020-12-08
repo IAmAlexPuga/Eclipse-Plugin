@@ -44,7 +44,7 @@ public class MetricsSingleton {
 	}
 	
 	public void computeHDiff() {
-		this.hDiff = ((.5*this.getUniqueOps().size())* operands )/this.getUniqueOps().size();
+		this.hDiff = ((.5*this.getUniqueOps().size())* this.getOps() )/this.getUniqueOps().size();
 	}
 	
 	public void computeHEffort() {

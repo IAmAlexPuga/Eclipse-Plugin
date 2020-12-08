@@ -60,6 +60,10 @@ public class StructuralMetricsCheckTest {
 		DetailAST mock = mock(DetailAST.class);
 		StructuralMetricsCheck spy = spy(new StructuralMetricsCheck());
 		
+		// reset Data before hand
+		spy.beginTree(mock);
+		
+		
 		// Set some default data
 		spy.metrics.addOperands();
 		spy.metrics.addOperands();
@@ -81,9 +85,9 @@ public class StructuralMetricsCheckTest {
 		String hVol = String.format("%.2f", spy.metrics.getHVolume());
 		String hEff = String.format("%.2f", spy.metrics.getHEffort());
 		
-		assertEquals("1.00", hDiff);
+		assertEquals("0.50", hDiff);
 		assertEquals("4.16", hVol);
-		assertEquals("4.16", hEff);
+		assertEquals("2.08", hEff);
 		
 	}
 
