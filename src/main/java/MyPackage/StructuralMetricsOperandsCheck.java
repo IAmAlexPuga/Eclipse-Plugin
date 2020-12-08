@@ -41,8 +41,6 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	public void finishTree(DetailAST rootAST) {
 		
 		// sepeate into function calls
-		// logs data for MS1
-		//log(rootAST.getLineNo(), "Number of operators " + operators);
 		log(rootAST.getLineNo(), "Number of operands: " + metrics.getOperands());
 		log(rootAST.getLineNo(), "Number of unique operands: " + metrics.getUniqueOperands().size());
 	
@@ -72,7 +70,7 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	
 	
 	public boolean isValidIdent(DetailAST ast) {
-		if( checkIdent(ast) || checkIdentVar(ast) ) {
+		if( this.checkIdent(ast) || this.checkIdentVar(ast) ) {
 			return true;
 		}
 		return false;
@@ -82,7 +80,7 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 		
 		// idk if class def should be included or not
 		// assuming imports ok
-		return ast.getType() == TokenTypes.IDENT && ast.getType() != TokenTypes.CLASS_DEF && (
+		return ast.getType() == TokenTypes.IDENT && (
 				ast.getParent().getType() == TokenTypes.DOT || 
 				ast.getParent().getType() == TokenTypes.VARIABLE_DEF ||
 				ast.getParent().getType() == TokenTypes.METHOD_DEF);
