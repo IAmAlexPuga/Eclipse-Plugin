@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
-public class TestStructuralMetricsComments {
+public class TestStructuralMetricsCommentsCheck {
 	
 	@Test
 	public void get_bcleTest() {
