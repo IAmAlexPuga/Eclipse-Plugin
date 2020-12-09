@@ -1,8 +1,7 @@
 package MyPackage;
 
 import com.puppycrawl.tools.checkstyle.api.*;
-import java.util.regex.Pattern;
-import java.util.*;
+
 
 public class exprCheck extends AbstractCheck{
 	

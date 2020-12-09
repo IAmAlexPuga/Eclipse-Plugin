@@ -39,7 +39,6 @@ public class StructuralMetricsLoopsCheck extends AbstractCheck {
 
 	@Override
 	public void finishTree(DetailAST rootAST) {
-		// sepeate into function calls
 		// logs data
 		log(rootAST.getLineNo(), "Number Looping statements: " + this.getLoopCount());
 	}
