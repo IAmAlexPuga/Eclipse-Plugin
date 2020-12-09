@@ -168,11 +168,18 @@ public class TestStructuralMetricsOperandsCheck {
 		Mockito.when(parent.getType()).thenReturn(TokenTypes.PLUS);
 		Mockito.when(mock.getParent()).thenReturn(parent);
 
-		Mockito.doReturn(parent).when(mock).getParent();
+		// T T T T F
 		Mockito.doReturn(TokenTypes.NUM_DOUBLE).when(mock).getType();
 		boolean ans = spy.checkIdentVar(mock);
 		assertTrue(ans);
-
+		
+		// T T T F T
+		Mockito.when(parent.getType()).thenReturn(TokenTypes.EXPR);
+		Mockito.when(mock.getParent()).thenReturn(parent);
+		ans = spy.checkIdentVar(mock);
+		assertTrue(ans);
+		
+		// T F T F T
 		Mockito.doReturn(TokenTypes.IDENT).when(mock).getType();
 		ans = spy.checkIdentVar(mock);
 		assertFalse(ans);
