@@ -22,7 +22,6 @@ public class TestMetricsSingleton {
 		single.resetHLength();
 		single.resetHVocab();
 		single.resetHVolume();
-		single.resetLoops();
 		single.resetOperands();
 		single.resetOps();
 		single.resetUniqueOperands();
@@ -133,15 +132,6 @@ public class TestMetricsSingleton {
 	}
 	
 	@Test
-	public void resetLoopsTest() {
-		MetricsSingleton single = spy(MetricsSingleton.getInstance());
-		single.addLoops();
-		single.resetLoops();
-		assertEquals(0,single.getLoops());
-		
-	}
-	
-	@Test
 	public void resetUniqueOpsTest() {
 		MetricsSingleton single = spy(MetricsSingleton.getInstance());
 		single.addUniqueOps(1,1);
@@ -210,15 +200,7 @@ public class TestMetricsSingleton {
 		assertEquals(1,single.getOperands());
 		
 	}
-	
-	@Test
-	public void addLoopsTest() {
-		MetricsSingleton single = spy(MetricsSingleton.getInstance());
-		single.addLoops();
-		assertEquals(1,single.getLoops());
-		
-	}
-	
+
 	@Test
 	public void addUniqueOpsTest() {
 		MetricsSingleton single = spy(MetricsSingleton.getInstance());
@@ -298,14 +280,7 @@ public class TestMetricsSingleton {
 		assertEquals(1,single.getExprs());
 		
 	}
-	
-	@Test
-	public void getLoopsTest() {
-		MetricsSingleton single = spy(MetricsSingleton.getInstance());
-		single.addLoops();
-		assertEquals(1,single.getLoops());
-	}
-	
+
 	@Test
 	public void getUniqueOpsTest() {
 		MetricsSingleton single = spy(MetricsSingleton.getInstance());

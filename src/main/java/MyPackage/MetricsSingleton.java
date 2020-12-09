@@ -7,7 +7,6 @@ public class MetricsSingleton {
 	private static int operators = 0;
 	private static int operands = 0;
 	private static int expressions = 0;
-	private static int loops = 0;
 	private static Map<Integer, Integer> uniqOps =  new HashMap<Integer, Integer>();
 	private static Map<String, Integer> uniqOperands =  new HashMap<String, Integer>();
 	private static int hLength = 0;
@@ -64,10 +63,6 @@ public class MetricsSingleton {
 		this.expressions = 0;
 	}
 	
-	public void resetLoops() {
-		this.loops = 0;
-	}
-	
 	public void resetUniqueOps() {
 		this.uniqOps = new HashMap<Integer, Integer>();
 	}
@@ -107,10 +102,6 @@ public class MetricsSingleton {
 	
 	public void addExprs() {
 		this.expressions += 1;
-	}
-	
-	public void addLoops() {
-		this.loops += 1;
 	}
 	
 	public void addUniqueOps(int key, int value) {
@@ -153,10 +144,6 @@ public class MetricsSingleton {
 	
 	public int getExprs() {
 		return this.expressions;
-	}
-	
-	public int getLoops() {
-		return this.loops;
 	}
 	
 	public Map<Integer, Integer> getUniqueOps() {
