@@ -77,7 +77,9 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	}
 	
 	public boolean checkIdent(DetailAST ast) {
-		
+		if(ast.getParent() == null) {
+			return false;
+		}
 		// idk if class def should be included or not
 		// assuming imports ok
 		return ast.getType() == TokenTypes.IDENT && (
@@ -87,6 +89,10 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	}
 	
 	public boolean checkIdentVar(DetailAST ast) {
+		if(ast.getParent() == null) {
+			return false;
+		}
+		
 		return !checkOperator(ast) && ast.getType() != TokenTypes.IDENT && !checkExpression(ast) &&
 				( checkOperator(ast.getParent()) || checkExpression(ast.getParent()) );
 	}
