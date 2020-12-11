@@ -18,10 +18,55 @@ import com.puppycrawl.tools.checkstyle.api.FileContents;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 
 public class TestDriver {
+
+	String filePath = "C:\\Users\\pugap\\Desktop\\Eclipse-Plugin\\src\\test\\java\\MyPackage\\";
 	
 	@Test
-	public void fileTest() {
+	public void BlackBoxExprTest() throws IOException, CheckstyleException {
 		
+		// Using code given for test driver
+		File file = new File(filePath + "BlackBoxExprTest.java");
+		FileText ft = new FileText(file, "UTF-8");
+		FileContents fc = new FileContents(ft);
+
+		// Fill AST with FileContents
+		DetailAST root = JavaParser.parse(fc);
+
+		// Initialize Intended Check
+		exprCheck check = new exprCheck();
+		check.metrics.resetExpressions();
+
+		// Configure Check
+		check.configure(new DefaultConfiguration("Local"));
+		check.contextualize(new DefaultContext());
+
+		// Initialize Local Variables in Check
+		check.beginTree(root);
+
+		// Visit Each Token in Tree
+		helper(check, root);
+
+		// Complete tree and display intended logs to user.
+		check.finishTree(root);
+
+		// for(LocalizedMessage lm : check.getMessages()) {
+		// System.out.println(lm.getMessage());
+		// }
+
+		int result = check.metrics.getExprs();
+
+		// Verify Results
+		assertEquals(4,result);
+		System.out.println("exprCheck Done!");
+
+	}
+
+	public void helper(AbstractCheck b, DetailAST a) {
+		while (a != null) {
+			b.visitToken(a);
+			helper(b, a.getFirstChild());
+			a = a.getNextSibling();
+		}
 	}
 
 }
