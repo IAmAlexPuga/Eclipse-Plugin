@@ -116,6 +116,9 @@ public class StructuralMetricsCommentsCheck extends AbstractCheck {
 	}
 	
 	public boolean isComment(DetailAST ast) {
+		
+		  if (ast.getParent() == null) { return false; }
+		 
 		return ast.getParent().getType() != TokenTypes.BLOCK_COMMENT_BEGIN && 
 				(ast.getType() == TokenTypes.SINGLE_LINE_COMMENT ||
 				ast.getType() == TokenTypes.BLOCK_COMMENT_BEGIN);

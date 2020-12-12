@@ -35,7 +35,6 @@ public class TestDriver {
 
 		// Initialize Intended Check
 		exprCheck check = new exprCheck();
-		check.metrics.resetExpressions();
 
 		// Configure Check
 		check.configure(new DefaultConfiguration("Local"));
@@ -76,8 +75,6 @@ public class TestDriver {
 
 		// Initialize Intended Check
 		StructuralMetricsOperandsCheck check = new StructuralMetricsOperandsCheck();
-		check.metrics.resetOperands();
-		check.metrics.resetUniqueOperands();
 		
 		// Configure Check
 		check.configure(new DefaultConfiguration("Local"));
@@ -100,15 +97,144 @@ public class TestDriver {
 		int uniqOpSize = check.metrics.getUniqueOperands().size();
 
 		// Verify Results
-		assertEquals(8, resultOperands);
-		assertEquals(16, uniqOpSize);
+		assertEquals(16, resultOperands);
+		assertEquals(15, uniqOpSize);
 		
 		System.out.println("Operands Check Done!");
 
 	}
+	
+	@Test
+	public void BlackBoxOperatorsTest() throws IOException, CheckstyleException {
+
+		// Using code given for test driver
+		File file = new File(filePath + "BlackBoxOperatorsTest.java");
+		FileText ft = new FileText(file, "UTF-8");
+		FileContents fc = new FileContents(ft);
+
+		// Fill AST with FileContents
+		DetailAST root = JavaParser.parse(fc);
+
+		// Initialize Intended Check
+		StructuralMetricsOperatorsCheck check = new StructuralMetricsOperatorsCheck();
+		
+		// Configure Check
+		check.configure(new DefaultConfiguration("Local"));
+		check.contextualize(new DefaultContext());
+
+		// Initialize Local Variables in Check
+		check.beginTree(root);
+
+		// Visit Each Token in Tree
+		helper(check, root);
+
+		// Complete tree and display intended logs to user.
+		check.finishTree(root);
+
+		for (LocalizedMessage lm : check.getMessages()) {
+			System.out.println(lm.getMessage());
+		}
+
+		int resultOps = check.metrics.getOps();
+		int uniqOpSize = check.metrics.getUniqueOps().size();
+
+		// Verify Results
+		assertEquals(3, resultOps);
+		assertEquals(1, uniqOpSize);
+		
+		System.out.println("Operators Check Done!");
+
+	}
+	
+	@Test
+	public void BlackBoxCommentsTest() throws IOException, CheckstyleException {
+
+		// Using code given for test driver
+		File file = new File(filePath + "BlackBoxCommentsTest.java");
+		FileText ft = new FileText(file, "UTF-8");
+		FileContents fc = new FileContents(ft);
+
+		// Fill AST with FileContents
+		DetailAST root = JavaParser.parse(fc);
+		JavaParser.appendHiddenCommentNodes(root);
+
+		// Initialize Intended Check
+		StructuralMetricsCommentsCheck check = new StructuralMetricsCommentsCheck();
+		
+		// Configure Check
+		check.configure(new DefaultConfiguration("Local"));
+		check.contextualize(new DefaultContext());
+
+		// Initialize Local Variables in Check
+		check.beginTree(root);
+
+		// Visit Each Token in Tree
+		helper(check, root);
+
+		// Complete tree and display intended logs to user.
+		check.finishTree(root);
+
+		for (LocalizedMessage lm : check.getMessages()) {
+			System.out.println(lm.getMessage());
+		}
+
+		int resultComments = check.getNumComments();
+		int resultLComments = check.getNumLinesComments();
+
+		// Verify Results
+		assertEquals(2, resultComments);
+		assertEquals(8, resultLComments);
+		
+		System.out.println("Comments Check Done!");
+
+	}
+	
+	@Test
+	public void BlackBoxLoopsTest() throws IOException, CheckstyleException {
+
+		// Using code given for test driver
+		File file = new File(filePath + "BlackBoxLoopsTest.java");
+		FileText ft = new FileText(file, "UTF-8");
+		FileContents fc = new FileContents(ft);
+
+		// Fill AST with FileContents
+		DetailAST root = JavaParser.parse(fc);
+
+		// Initialize Intended Check
+		StructuralMetricsLoopsCheck check = new StructuralMetricsLoopsCheck();
+		
+		// Configure Check
+		check.configure(new DefaultConfiguration("Local"));
+		check.contextualize(new DefaultContext());
+
+		// Initialize Local Variables in Check
+		check.beginTree(root);
+
+		// Visit Each Token in Tree
+		helper(check, root);
+
+		// Complete tree and display intended logs to user.
+		check.finishTree(root);
+
+		for (LocalizedMessage lm : check.getMessages()) {
+			System.out.println(lm.getMessage());
+		}
+
+		int result = check.getLoopCount();
+		
+
+		// Verify Results
+		assertEquals(4, result);
+
+		
+		System.out.println("Loop Check Done!");
+
+	}
+
 
 	public void helper(AbstractCheck b, DetailAST a) {
 		while (a != null) {
+			a.getType();
 			b.visitToken(a);
 			helper(b, a.getFirstChild());
 			a = a.getNextSibling();
