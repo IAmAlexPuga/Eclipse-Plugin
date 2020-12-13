@@ -59,6 +59,9 @@ public class StructuralMetricsOperatorsCheck extends AbstractCheck {
 	
 
 	public boolean checkOperator(DetailAST ast) {
+		if(checkImport(ast)) {
+			return false;
+		}
 		return ast.getType() == TokenTypes.PLUS || ast.getType() == TokenTypes.MINUS || ast.getType() == TokenTypes.STAR
 				|| ast.getType() == TokenTypes.DIV || ast.getType() == TokenTypes.MOD || ast.getType() == TokenTypes.PLUS_ASSIGN 
 				|| ast.getType() == TokenTypes.MINUS_ASSIGN || ast.getType() == TokenTypes.DIV_ASSIGN || ast.getType() == TokenTypes.ASSIGN
@@ -70,9 +73,21 @@ public class StructuralMetricsOperatorsCheck extends AbstractCheck {
 				|| ast.getType() == TokenTypes.BXOR || ast.getType() == TokenTypes.BXOR_ASSIGN || ast.getType() == TokenTypes.LOR || ast.getType() == TokenTypes.LNOT || ast.getType() == TokenTypes.QUESTION
 				|| ast.getType() ==TokenTypes.COLON;
 	}
+	
+	public boolean checkImport(DetailAST ast) {
+		if(ast.getParent() == null || ast.getParent().getType() != TokenTypes.DOT) {
+			return false;
+		}
+		
+		return true;
+	}
 
 	
 	public void addUniqueOps(DetailAST ast) {
+		if(checkImport(ast)) {
+			return;
+		}
+		
 		int key = convertUniqueOp(ast);
 		
 		// makes sure key is non negative and uniqOps does not contain key

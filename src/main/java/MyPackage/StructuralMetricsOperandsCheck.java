@@ -20,13 +20,13 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	public int[] getAcceptableTokens() {
 		// TODO Auto-generated method stub
 		return new int[] {TokenTypes.PLUS, TokenTypes.MINUS, TokenTypes.MOD, 
-				TokenTypes.DIV,TokenTypes.STAR , TokenTypes.VARIABLE_DEF, 
+				TokenTypes.DIV,TokenTypes.STAR , TokenTypes.VARIABLE_DEF, TokenTypes.TYPECAST,
 				TokenTypes.NUM_INT, TokenTypes.ASSIGN, TokenTypes.EXPR, TokenTypes.IDENT,
 				TokenTypes.SLIST, TokenTypes.PLUS_ASSIGN, TokenTypes.MINUS_ASSIGN, TokenTypes.DIV_ASSIGN,
 				TokenTypes.STAR_ASSIGN, TokenTypes.MOD_ASSIGN, TokenTypes.INC, TokenTypes.POST_INC,
 				TokenTypes.DEC, TokenTypes.POST_DEC, TokenTypes.GE, TokenTypes.GT, TokenTypes.SR, TokenTypes.SR_ASSIGN,
 				TokenTypes.LE, TokenTypes.LT, TokenTypes.SL, TokenTypes.SL_ASSIGN, TokenTypes.EQUAL, TokenTypes.NOT_EQUAL
-				, TokenTypes.BAND, TokenTypes.BAND_ASSIGN, TokenTypes.BNOT, TokenTypes.BOR, TokenTypes.BOR_ASSIGN,
+				, TokenTypes.BAND, TokenTypes.BAND_ASSIGN, TokenTypes.BNOT, TokenTypes.BOR, TokenTypes.BOR_ASSIGN, TokenTypes.CHAR_LITERAL,
 				TokenTypes.BXOR, TokenTypes.BXOR_ASSIGN,TokenTypes.LOR, TokenTypes.LNOT, TokenTypes.QUESTION, TokenTypes.COLON,
 				TokenTypes.DOT, TokenTypes.STRING_LITERAL, TokenTypes.LITERAL_WHILE, TokenTypes.LITERAL_FOR, TokenTypes.DO_WHILE};
 	}
@@ -52,7 +52,7 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 		// this also works to get operands
 		// add checks if its others not than number like char, strings, ect...		
 		// checks if its a number 
-		if(checkNum(aAST) && (aAST.getParent().getType() ==TokenTypes.EXPR || checkOperator(aAST.getParent()))) {
+		if(isVariable(aAST) && (aAST.getParent().getType() ==TokenTypes.EXPR || checkOperator(aAST.getParent()))) {
 			metrics.addOperands();
 		} 
 				
@@ -66,6 +66,16 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 		}
 		
 		
+	}
+	
+	public boolean isVariable(DetailAST ast) {
+		if(checkNum(ast) || ast.getType() == TokenTypes.CHAR_LITERAL 
+				|| ast.getType() == TokenTypes.STRING_LITERAL 
+				|| ast.getType() == TokenTypes.TYPECAST) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	
