@@ -43,7 +43,7 @@ public class MetricsSingleton {
 	}
 	
 	public void computeHDiff() {
-		this.hDiff = ((.5*this.getUniqueOps().size())* this.getOps() )/this.getUniqueOps().size();
+		this.hDiff = ((.5*this.getUniqueOps().size())* this.getOperands() )/this.getUniqueOperands().size();
 	}
 	
 	public void computeHEffort() {

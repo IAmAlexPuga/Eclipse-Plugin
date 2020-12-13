@@ -82,9 +82,12 @@ public class TestMetricsSingleton {
 		single.addUniqueOps(2, 1);
 		single.addUniqueOps(3, 1);
 		single.addUniqueOps(4, 1);
+		single.addUniqueOperands("a", 1);
+		single.addUniqueOperands("b", 1);
 		Mockito.doReturn(5).when(single).getOps();
+		Mockito.doReturn(5).when(single).getOperands();
 
-		double ans = ((.5 * 4) * 5) / 4;
+		double ans = ((.5 * 4) * 5) / 2;
 		single.computeHDiff();
 		
 		assertEquals(ans, single.getHDiff());
