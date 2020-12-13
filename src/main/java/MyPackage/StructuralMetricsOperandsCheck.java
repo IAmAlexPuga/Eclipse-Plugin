@@ -46,20 +46,10 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	@Override
 	public void visitToken(DetailAST aAST) {
 
-		// this also works to get operands
-		// add checks if its others not than number like char, strings, ect...
-		// checks if its a number
-
 		if (isVariable(aAST) && (aAST.getParent().getType() == TokenTypes.EXPR || checkOperator(aAST.getParent()))) {
 			metrics.addOperands();
 			addUniqueOperand(aAST);
 		}
-
-		/*
-		 * // checks for unique operands if(isValidIdent(aAST)) {
-		 * if(!metrics.getUniqueOperands().containsKey(aAST.getText())) {
-		 * metrics.addUniqueOperands(aAST.getText(), 1); } }
-		 */
 
 	}
 
@@ -70,19 +60,12 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	}
 
 	public boolean isVariable(DetailAST ast) {
-		if (checkNum(ast) || ast.getType() == TokenTypes.CHAR_LITERAL || ast.getType() == TokenTypes.STRING_LITERAL
-				|| ast.getType() == TokenTypes.TYPECAST || isValidMethodCall(ast)) {
-			return true;
-		}
-
-		return false;
+		return (checkNum(ast) || ast.getType() == TokenTypes.CHAR_LITERAL || ast.getType() == TokenTypes.STRING_LITERAL
+				|| ast.getType() == TokenTypes.TYPECAST || isValidMethodCall(ast)); 
 	}
 
 	public boolean isValidIdent(DetailAST ast) {
-		if (this.checkIdent(ast) || this.checkIdentVar(ast)) {
-			return true;
-		}
-		return false;
+		return (checkIdent(ast) || checkIdentVar(ast));
 	}
 
 	public boolean checkIdent(DetailAST ast) {
