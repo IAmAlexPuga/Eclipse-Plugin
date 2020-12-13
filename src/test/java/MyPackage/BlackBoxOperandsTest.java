@@ -4,7 +4,7 @@ public class BlackBoxOperandsTest {
 	public static void main(String[] args) {
 		double j = 2.0 / 4;
 		// remove Uniq ops from getting type var = something
-		char let = 'a' + (char)3;
+		char let = 'a' ;
 		// not catching strings & chars
 		String word = "Hello";
 		// not catching word.length

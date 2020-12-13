@@ -96,8 +96,8 @@ public class TestDriver {
 		int uniqOpSize = check.metrics.getUniqueOperands().size();
 
 		// Verify Results
-		assertEquals(15, resultOperands);
-		assertEquals(14, uniqOpSize);
+		assertEquals(14, resultOperands);
+		assertEquals(13, uniqOpSize);
 
 		System.out.println("Operands Check Done!");
 
@@ -202,8 +202,8 @@ public class TestDriver {
 		// default values from prev Black box test
 		int ops = 3;
 		int uniqOps = 2;
-		int oprands = 15;
-		int uniqOprands = 14;
+		int oprands = 14;
+		int uniqOprands = 13;
 
 		int rHLength = ops + oprands;
 		double rHVoc = uniqOprands + uniqOps;
@@ -308,7 +308,10 @@ public class TestDriver {
 	public void helper(AbstractCheck b, DetailAST a) {
 		while (a != null) {
 			a.getType();
-			b.visitToken(a);
+			if(a.getParent() != null) {
+				b.visitToken(a);
+			}
+			
 			helper(b, a.getFirstChild());
 			a = a.getNextSibling();
 		}
