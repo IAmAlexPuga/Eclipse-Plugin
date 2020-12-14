@@ -30,8 +30,15 @@ public class TestMetricsSingleton {
 
 	@Test
 	public void getInstanceTest() {
-		MetricsSingleton single = MetricsSingleton.getInstance();
+		MetricsSingleton single = spy(MetricsSingleton.class);
+		
+		single = MetricsSingleton.getInstance();
 		assertNotNull(single);
+		
+		single.addExprs();
+		single = MetricsSingleton.getInstance();
+		assertEquals(1, single.getExprs());
+		
 	}
 
 	@Test
