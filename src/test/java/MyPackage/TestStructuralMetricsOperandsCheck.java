@@ -79,36 +79,87 @@ public class TestStructuralMetricsOperandsCheck {
 		// adds operand path1 Mockito.when(spy.checkNum(mock)).thenReturn(true);
 		//Mockito.doReturn(true).when(spy).checkNum(mock);
 		Mockito.doReturn(false).when(spy).checkOperator(mock);
+		Mockito.doReturn(true).when(spy).checkExpression(mock);
 		Mockito.doReturn(true).when(spy).isVariable(mock);
 		spy.visitToken(mock);
 		assertEquals(1, spy.metrics.getOperands());
 
 		// adds operand path2
-		Mockito.when(parent.getType()).thenReturn(TokenTypes.PLUS);
-		Mockito.when(mock.getParent()).thenReturn(parent);
+
+		Mockito.doReturn(true).when(spy).checkOperator(mock);
+		Mockito.doReturn(false).when(spy).checkExpression(mock);
+		Mockito.doReturn(true).when(spy).checkOperator(mock);
 		spy.visitToken(mock);
 		assertEquals(2, spy.metrics.getOperands());
 		
-		// fails to add to operands
-		Mockito.when(parent.getType()).thenReturn(TokenTypes.ASSIGN);
-		Mockito.when(mock.getParent()).thenReturn(parent);
+		Mockito.doReturn(true).when(spy).checkOperator(mock);
+		Mockito.doReturn(true).when(spy).checkExpression(mock);
+		Mockito.doReturn(false).when(spy).isVariable(mock);
+		spy.visitToken(mock);
+		assertEquals(2, spy.metrics.getOperands());
+		
+		Mockito.doReturn(false).when(spy).checkExpression(mock);
+		Mockito.doReturn(false).when(spy).checkOperator(mock);
 		Mockito.doReturn(false).when(spy).isVariable(mock);
 		spy.visitToken(mock);
 		assertEquals(2, spy.metrics.getOperands());
 
-		// adds unique op Mockito.when(spy.checkNum(mock)).thenReturn(false);
-		/*
-		 * Mockito.when(spy.isValidIdent(mock)).thenReturn(true);
-		 * Mockito.when(mock.getText()).thenReturn("a"); spy.visitToken(mock);
-		 * assertEquals(2, spy.metrics.getUniqueOperands().size());
-		 * 
-		 * spy.visitToken(mock); // fails since a unique op with a exists
-		 * spy.visitToken(mock); assertEquals(2,
-		 * spy.metrics.getUniqueOperands().size());
-		 */
-
 	}
-
+	
+	@Test
+	public void isValidMethodCallTest() {
+		StructuralMetricsOperandsCheck spy = spy(new StructuralMetricsOperandsCheck());
+		DetailAST mock = mock(DetailAST.class);
+		DetailAST parent = mock(DetailAST.class);
+		DetailAST gP = mock(DetailAST.class);
+		
+		Mockito.doReturn(TokenTypes.METHOD_CALL).when(mock).getType();
+		Mockito.doReturn(TokenTypes.SLIST).when(gP).getType();
+		Mockito.doReturn(gP).when(parent).getParent();
+		Mockito.doReturn(parent).when(mock).getParent();
+		
+		assertFalse(spy.isValidMethodCall(mock));
+		
+		Mockito.doReturn(TokenTypes.ANNOTATION).when(gP).getType();
+		assertTrue(spy.isValidMethodCall(mock));
+		
+		Mockito.doReturn(TokenTypes.AT).when(mock).getType();
+		assertFalse(spy.isValidMethodCall(mock));
+		
+		
+	}
+	
+	@Test
+	public void isVariableTest() {
+		StructuralMetricsOperandsCheck spy = spy(new StructuralMetricsOperandsCheck());
+		DetailAST mock = mock(DetailAST.class);
+		
+		Mockito.doReturn(TokenTypes.ANNOTATION).when(mock).getType();
+		
+		Mockito.doReturn(false).when(spy).isValidMethodCall(mock);
+		Mockito.doReturn(true).when(spy).checkNum(mock);
+		assertTrue(spy.isVariable(mock));
+		
+		Mockito.doReturn(true).when(spy).isValidMethodCall(mock);
+		Mockito.doReturn(false).when(spy).checkNum(mock);
+		assertTrue(spy.isVariable(mock));
+		
+		Mockito.doReturn(false).when(spy).isValidMethodCall(mock);
+		Mockito.doReturn(false).when(spy).checkNum(mock);
+		assertFalse(spy.isVariable(mock));
+		
+		Mockito.doReturn(TokenTypes.CHAR_LITERAL).when(mock).getType();
+		assertTrue(spy.isVariable(mock));
+		
+		Mockito.doReturn(TokenTypes.TYPECAST).when(mock).getType();
+		assertTrue(spy.isVariable(mock));
+		
+		Mockito.doReturn(TokenTypes.STRING_LITERAL).when(mock).getType();
+		assertTrue(spy.isVariable(mock));
+		
+		
+	}
+	
 	@Test
 	public void checkExpressionTest() {
 		StructuralMetricsOperandsCheck spy = spy(new StructuralMetricsOperandsCheck());
@@ -117,6 +168,10 @@ public class TestStructuralMetricsOperandsCheck {
 		Mockito.doReturn(TokenTypes.EXPR).when(mock).getType();
 		boolean ans = spy.checkExpression(mock);
 		assertTrue(ans);
+		
+		Mockito.doReturn(TokenTypes.ANNOTATION_ARRAY_INIT).when(mock).getType();
+		ans = spy.checkExpression(mock);
+		assertFalse(ans);
 	}
 
 	@Test
@@ -139,6 +194,27 @@ public class TestStructuralMetricsOperandsCheck {
 			assertTrue(isTrue);
 		}
 
+	}
+	
+	@Test
+	public void addUniqueOperandTest() {
+		StructuralMetricsOperandsCheck spy = spy(new StructuralMetricsOperandsCheck());
+		DetailAST mock = mock(DetailAST.class);
+		spy.metrics.resetUniqueOperands();
+		
+		Mockito.doReturn(TokenTypes.ANNOTATION).when(mock).getType();
+		Mockito.doReturn("a").when(mock).getText();
+		spy.addUniqueOperand(mock);
+		assertEquals(1, spy.metrics.getUniqueOperands().size());
+		
+		spy.addUniqueOperand(mock);
+		assertEquals(1, spy.metrics.getUniqueOperands().size());
+		
+		Mockito.doReturn(TokenTypes.METHOD_CALL).when(mock).getType();
+		Mockito.doReturn("b").when(mock).getText();
+		spy.addUniqueOperand(mock);
+		assertEquals(2, spy.metrics.getUniqueOperands().size());
+		
 	}
 
 	@Test
