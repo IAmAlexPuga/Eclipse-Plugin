@@ -46,14 +46,14 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	@Override
 	public void visitToken(DetailAST aAST) {
 
-		if (isVariable(aAST) && (aAST.getParent().getType() == TokenTypes.EXPR || checkOperator(aAST.getParent()))) {
+		if (isVariable(aAST) && (checkExpression(aAST.getParent()) || checkOperator(aAST.getParent()))) {
 			metrics.addOperands();
 			addUniqueOperand(aAST);
 		}
 
 	}
 
-	// && (checkExpression(ast.getParent()) || checkOperator(ast.getParent())
+
 	public boolean isValidMethodCall(DetailAST ast) {
 		return (ast.getType() == TokenTypes.METHOD_CALL && ast.getParent().getParent().getType() != TokenTypes.SLIST);
 
@@ -62,30 +62,6 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	public boolean isVariable(DetailAST ast) {
 		return (checkNum(ast) || ast.getType() == TokenTypes.CHAR_LITERAL || ast.getType() == TokenTypes.STRING_LITERAL
 				|| ast.getType() == TokenTypes.TYPECAST || isValidMethodCall(ast)); 
-	}
-
-	public boolean isValidIdent(DetailAST ast) {
-		return (checkIdent(ast) || checkIdentVar(ast));
-	}
-
-	public boolean checkIdent(DetailAST ast) {
-		if (ast.getParent() == null) {
-			return false;
-		}
-		// idk if class def should be included or not
-		// assuming imports ok
-		return ast.getType() == TokenTypes.IDENT
-				&& (ast.getParent().getType() == TokenTypes.DOT || ast.getParent().getType() == TokenTypes.VARIABLE_DEF
-						|| ast.getParent().getType() == TokenTypes.METHOD_DEF);
-	}
-
-	public boolean checkIdentVar(DetailAST ast) {
-		if (ast.getParent() == null) {
-			return false;
-		}
-
-		return !checkOperator(ast) && ast.getType() != TokenTypes.IDENT && !checkExpression(ast)
-				&& (checkOperator(ast.getParent()) || checkExpression(ast.getParent()));
 	}
 
 	public boolean checkExpression(DetailAST ast) {
