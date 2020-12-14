@@ -6,6 +6,7 @@ import static org.mockito.Mockito.spy;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 public class TestStructuralMetricsCommentsCheck {
@@ -238,6 +239,25 @@ public class TestStructuralMetricsCommentsCheck {
 		assertEquals(1, spy.getNumComments());
 		assertEquals(31, spy.getNumComments() + spy.getNumLinesComments());
 		
+		String msgs[] = {"Number of Comments: 1", "Number of Lines Of Comments: 31"};
+		int count = 0;
+		for (LocalizedMessage lm : spy.getMessages()) {
+			assertEquals(msgs[count], lm);
+			count++;
+		}
+	}
+	
+	@Test
+	public void computeBCCountTest() {
+		StructuralMetricsCommentsCheck spy = spy(new StructuralMetricsCommentsCheck());
+		spy.set_bcle(6);
+		spy.set_bcls(3);
+		
+		spy.computeBCCount();
+		
+		assertEquals(3, spy.getNumLinesComments());
+		assertEquals(-1, spy.get_bcle());
+		assertEquals(-1, spy.get_bcls());
 	}
 	
 	

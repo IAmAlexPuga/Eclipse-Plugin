@@ -6,6 +6,7 @@ import static org.mockito.Mockito.spy;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 public class TestExprCheck {
@@ -94,21 +95,7 @@ public class TestExprCheck {
 	
 	@Test
 	public void finishTreeTest() {
-		/*
-		 * DetailAST mock = mock(DetailAST.class); exprCheck mockExpr =
-		 * mock(exprCheck.class);
-		 * 
-		 * mockExpr.metrics.addExprs();
-		 * 
-		 * Mockito.doAnswer(invocation -> { Object a1 = invocation.getArgument(0);
-		 * Object a2 = invocation.getArgument(1);
-		 * 
-		 * assertEquals("Expr:",a2); assertEquals(1,a1); return null;
-		 * }).when(mockExpr).log(Mockito.any(Integer.class), Mockito.any(String.class));
-		 * 
-		 * mockExpr.finishTree(mock); mockExpr.log(1, "Expr:");
-		 */
-		
+
 		DetailAST mock = mock(DetailAST.class);
 		exprCheck spy = spy(new exprCheck());
 		
@@ -121,7 +108,14 @@ public class TestExprCheck {
 		spy.finishTree(mock);
 		
 		assertEquals(1, spy.metrics.getExprs());
-		//assertEquals(4, spy.metrics.getHVocab());
+		
+		String msgs[] = {"Expressions: 1"};
+		int count = 0;
+		for (LocalizedMessage lm : spy.getMessages()) {
+			assertEquals(msgs[count], lm);
+			count++;
+		}
+
 		
 	}
 	

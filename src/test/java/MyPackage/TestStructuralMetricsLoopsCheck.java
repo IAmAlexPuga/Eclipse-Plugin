@@ -6,6 +6,7 @@ import static org.mockito.Mockito.spy;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 public class TestStructuralMetricsLoopsCheck {
@@ -71,6 +72,13 @@ public class TestStructuralMetricsLoopsCheck {
 		Mockito.doNothing().when(spy).log(Mockito.anyInt(), Mockito.anyString());
 		spy.finishTree(mock);
 		assertEquals(3, spy.getLoopCount());
+		
+		String msgs[] = {"Number Looping statements: 3"};
+		int count = 0;
+		for (LocalizedMessage lm : spy.getMessages()) {
+			assertEquals(msgs[count], lm);
+			count++;
+		}
 		
 	}
 	

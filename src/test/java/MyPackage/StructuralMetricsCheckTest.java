@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 
 
 public class StructuralMetricsCheckTest {
@@ -87,6 +88,17 @@ public class StructuralMetricsCheckTest {
 		assertEquals(rHDiff, spy.metrics.getHDiff());
 		assertEquals(rHVol, spy.metrics.getHVolume());
 		assertEquals(rHEff, spy.metrics.getHEffort());
+		
+		String msgs[] = {"Halstead Length: 3", "Halstead Vocab: 4"
+				,"Halstead Volume: "+ String. format("%.2f",rHVol)
+				, "Halstead Difficulty: " + String. format("%.2f",rHDiff)
+				,"Halstead Effort: "+ String. format("%.2f",rHEff)};
+		
+		int count = 0;
+		for (LocalizedMessage lm : spy.getMessages()) {
+			assertEquals(msgs[count], lm);
+			count++;
+		}
 		
 	}
 
