@@ -63,13 +63,6 @@ public class TestStructuralMetricsOperandsCheck {
 
 		assertEquals(1, spy.metrics.getOperands());
 		assertEquals(1, spy.metrics.getUniqueOperands().size());
-		
-		String msgs[] = {"Number of operands: 1", "Number of unique operands: 1"};
-		int count = 0;
-		for (LocalizedMessage lm : spy.getMessages()) {
-			assertEquals(msgs[count], lm);
-			count++;
-		}
 
 	}
 

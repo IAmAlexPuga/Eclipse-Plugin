@@ -49,8 +49,15 @@ public class TestDriver {
 		// Complete tree and display intended logs to user.
 		check.finishTree(root);
 
+		String msgs[] = { "Expressions: 9" };
+		int count = 0;
+
+		// checks the size of log outputs
+		assertEquals(1, check.getMessages().size());
 		for (LocalizedMessage lm : check.getMessages()) {
 			System.out.println(lm.getMessage());
+			assertEquals(msgs[count], lm.getMessage());
+			count++;
 		}
 
 		int result = check.metrics.getExprs();
@@ -88,8 +95,14 @@ public class TestDriver {
 		// Complete tree and display intended logs to user.
 		check.finishTree(root);
 
+		String msgs[] = { "Number of operands: 18", "Number of unique operands: 15" };
+		int count = 0;
+		// checks the size of log outputs
+		assertEquals(2, check.getMessages().size());
 		for (LocalizedMessage lm : check.getMessages()) {
 			System.out.println(lm.getMessage());
+			assertEquals(msgs[count], lm.getMessage());
+			count++;
 		}
 
 		int resultOperands = check.metrics.getOperands();
@@ -130,8 +143,15 @@ public class TestDriver {
 		// Complete tree and display intended logs to user.
 		check.finishTree(root);
 
+		String msgs[] = { "Number of operators 3", "Number of unique operators 2" };
+		int count = 0;
+
+		// checks the size of log outputs
+		assertEquals(2, check.getMessages().size());
 		for (LocalizedMessage lm : check.getMessages()) {
 			System.out.println(lm.getMessage());
+			assertEquals(msgs[count], lm.getMessage());
+			count++;
 		}
 
 		int resultOps = check.metrics.getOps();
@@ -189,16 +209,6 @@ public class TestDriver {
 		checkOprand.finishTree(root);
 		metrics.finishTree(root);
 
-		for (LocalizedMessage lm : metrics.getMessages()) {
-			System.out.println(lm.getMessage());
-		}
-
-		int hLength = metrics.metrics.getHLength();
-		double hDiff = metrics.metrics.getHDiff();
-		double hEff = metrics.metrics.getHEffort();
-		double hVol = metrics.metrics.getHVolume();
-		double hVoc = metrics.metrics.getHVocab();
-
 		// default values from prev Black box test
 		int ops = 3;
 		int uniqOps = 2;
@@ -210,6 +220,28 @@ public class TestDriver {
 		double rHVol = rHLength * Math.log(rHVoc);
 		double rHDiff = ((.5 * uniqOps) * oprands) / uniqOprands;
 		double rhEff = rHDiff * rHVol;
+
+		String msgs[] = { "Halstead Difficulty: " + String.format("%.2f", rHDiff),
+				"Halstead Effort: " + String.format("%.2f", rhEff), "Halstead Length: " + rHLength,
+				"Halstead Vocab: " + rHVoc, "Halstead Volume: " + String.format("%.2f", rHVol) };
+
+		int count = 0;
+
+		
+		for (LocalizedMessage lm : metrics.getMessages()) {
+			System.out.println(lm.getMessage());
+			assertEquals(msgs[count], lm.getMessage());
+			count++;
+		}
+		
+		// checks the size of log outputs
+		assertEquals(5, metrics.getMessages().size());
+
+		int hLength = metrics.metrics.getHLength();
+		double hDiff = metrics.metrics.getHDiff();
+		double hEff = metrics.metrics.getHEffort();
+		double hVol = metrics.metrics.getHVolume();
+		double hVoc = metrics.metrics.getHVocab();
 
 		// Verify Results
 		assertEquals(rHLength, hLength);
@@ -250,8 +282,15 @@ public class TestDriver {
 		// Complete tree and display intended logs to user.
 		check.finishTree(root);
 
+		String msgs[] = { "Number of Comments: 2", "Number of Lines Of Comments: 10" };
+		int count = 0;
+
+		// checks the size of log outputs
+		assertEquals(2, check.getMessages().size());
 		for (LocalizedMessage lm : check.getMessages()) {
 			System.out.println(lm.getMessage());
+			assertEquals(msgs[count], lm.getMessage());
+			count++;
 		}
 
 		int resultComments = check.getNumComments();
@@ -259,6 +298,7 @@ public class TestDriver {
 
 		// Verify Results
 		assertEquals(2, resultComments);
+		// spcf only linecomments not total
 		assertEquals(8, resultLComments);
 
 		System.out.println("Comments Check Done!");
@@ -292,8 +332,16 @@ public class TestDriver {
 		// Complete tree and display intended logs to user.
 		check.finishTree(root);
 
+		String msgs[] = { "Number Looping statements: 4" };
+		int count = 0;
+
+		// checks the size of log outputs
+		assertEquals(1, check.getMessages().size());
+
 		for (LocalizedMessage lm : check.getMessages()) {
 			System.out.println(lm.getMessage());
+			assertEquals(msgs[count], lm.getMessage());
+			count++;
 		}
 
 		int result = check.getLoopCount();
@@ -308,10 +356,10 @@ public class TestDriver {
 	public void helper(AbstractCheck b, DetailAST a) {
 		while (a != null) {
 			a.getType();
-			if(a.getParent() != null) {
+			if (a.getParent() != null) {
 				b.visitToken(a);
 			}
-			
+
 			helper(b, a.getFirstChild());
 			a = a.getNextSibling();
 		}

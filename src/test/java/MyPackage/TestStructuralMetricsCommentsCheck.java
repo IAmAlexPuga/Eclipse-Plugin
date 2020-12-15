@@ -239,12 +239,6 @@ public class TestStructuralMetricsCommentsCheck {
 		assertEquals(1, spy.getNumComments());
 		assertEquals(31, spy.getNumComments() + spy.getNumLinesComments());
 		
-		String msgs[] = {"Number of Comments: 1", "Number of Lines Of Comments: 31"};
-		int count = 0;
-		for (LocalizedMessage lm : spy.getMessages()) {
-			assertEquals(msgs[count], lm);
-			count++;
-		}
 	}
 	
 	@Test

@@ -73,13 +73,6 @@ public class TestStructuralMetricsLoopsCheck {
 		spy.finishTree(mock);
 		assertEquals(3, spy.getLoopCount());
 		
-		String msgs[] = {"Number Looping statements: 3"};
-		int count = 0;
-		for (LocalizedMessage lm : spy.getMessages()) {
-			assertEquals(msgs[count], lm);
-			count++;
-		}
-		
 	}
 	
 	@Test

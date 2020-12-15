@@ -61,12 +61,6 @@ public class TestStructuralMetricsOperatorsCheck {
 		assertEquals(1, spy.metrics.getOps());
 		assertEquals(1, spy.metrics.getUniqueOps().size());
 		
-		String msgs[] = {"Number of operators 1", "Number of unique operators 1"};
-		int count = 0;
-		for (LocalizedMessage lm : spy.getMessages()) {
-			assertEquals(msgs[count], lm);
-			count++;
-		}
 	}
 	
 	@Test
