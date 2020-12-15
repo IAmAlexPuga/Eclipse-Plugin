@@ -6,6 +6,7 @@ import static org.mockito.Mockito.spy;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 public class TestStructuralMetricsLoopsCheck {

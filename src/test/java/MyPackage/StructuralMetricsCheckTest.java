@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 
 
 public class StructuralMetricsCheckTest {
@@ -63,7 +64,6 @@ public class StructuralMetricsCheckTest {
 		// reset Data before hand
 		spy.beginTree(mock);
 		
-		
 		// Set some default data
 		spy.metrics.addOperands();
 		spy.metrics.addOperands();
@@ -78,16 +78,17 @@ public class StructuralMetricsCheckTest {
 		Mockito.doNothing().when(spy).log(Mockito.anyInt(), Mockito.anyString());
 		spy.finishTree(mock);
 		
+		double rHDiff = ((.5 * spy.metrics.getUniqueOps().size()) * spy.metrics.getOperands()) / spy.metrics.getUniqueOperands().size();
+		double rHVoc = spy.metrics.getUniqueOperands().size() + spy.metrics.getUniqueOps().size();
+		double rHVol = spy.metrics.getHLength() * Math.log(rHVoc);
+		double rHEff = rHDiff * rHVol;
+		
 		assertEquals(3, spy.metrics.getHLength());
 		assertEquals(4, spy.metrics.getHVocab());
+		assertEquals(rHDiff, spy.metrics.getHDiff());
+		assertEquals(rHVol, spy.metrics.getHVolume());
+		assertEquals(rHEff, spy.metrics.getHEffort());
 		
-		String hDiff = String.format("%.2f", spy.metrics.getHDiff());
-		String hVol = String.format("%.2f", spy.metrics.getHVolume());
-		String hEff = String.format("%.2f", spy.metrics.getHEffort());
-		
-		assertEquals("0.50", hDiff);
-		assertEquals("4.16", hVol);
-		assertEquals("2.08", hEff);
 		
 	}
 

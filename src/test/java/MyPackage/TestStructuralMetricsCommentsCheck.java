@@ -6,6 +6,7 @@ import static org.mockito.Mockito.spy;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 public class TestStructuralMetricsCommentsCheck {
@@ -94,6 +95,30 @@ public class TestStructuralMetricsCommentsCheck {
 		assertEquals(0,spy.getNumLinesComments());
 	}
 	
+	@Test
+	public void isCommentTest() {
+		DetailAST mock = mock(DetailAST.class);
+		StructuralMetricsCommentsCheck spy = spy(new StructuralMetricsCommentsCheck());
+		DetailAST parent = mock(DetailAST.class);
+
+		Mockito.doReturn(TokenTypes.LITERAL_CHAR).when(parent).getType();
+		Mockito.doReturn(TokenTypes.BLOCK_COMMENT_BEGIN).when(mock).getType();
+		Mockito.doReturn(parent).when(mock).getParent();
+		assertTrue(spy.isComment(mock));
+		
+		Mockito.doReturn(TokenTypes.SINGLE_LINE_COMMENT).when(mock).getType();
+		assertTrue(spy.isComment(mock));
+		
+		Mockito.doReturn(TokenTypes.LAND).when(mock).getType();
+		assertFalse(spy.isComment(mock));
+		
+		Mockito.doReturn(TokenTypes.BLOCK_COMMENT_BEGIN).when(parent).getType();
+		Mockito.doReturn(TokenTypes.BLOCK_COMMENT_END).when(mock).getType();
+		Mockito.doReturn(parent).when(mock).getParent();
+		assertFalse(spy.isComment(mock));
+		
+
+	}
 	
 	@Test
 	public void isCommentNodesRequired() {
@@ -157,19 +182,23 @@ public class TestStructuralMetricsCommentsCheck {
 		assertEquals(2, spy.getNumComments());
 		assertEquals(5, spy.get_bcls());
 		
-		// Fails to add num comments
-		Mockito.when(parent.getType()).thenReturn(TokenTypes.BLOCK_COMMENT_BEGIN);
-		Mockito.when(mock.getParent()).thenReturn(parent);
+		spy.reset_bcls();
+		Mockito.when(mock.getType()).thenReturn(TokenTypes.BLOCK_COMMENT_END);
+		Mockito.when(mock.getLineNo()).thenReturn(5);
 		spy.visitToken(mock);
 		assertEquals(2, spy.getNumComments());
+		assertEquals(5, spy.get_bcle());
 		
 		// Grabs the end block
+		Mockito.doReturn(4).when(spy).get_bcls();
 		Mockito.when(mock.getType()).thenReturn(TokenTypes.BLOCK_COMMENT_END);
 		Mockito.when(mock.getLineNo()).thenReturn(9);
 		spy.visitToken(mock);
 		
 		// bcle and bcls gets reset
 		assertEquals(-1,spy.get_bcle());
+		// reset the bcls manually since it will return 4
+		Mockito.doReturn(-1).when(spy).get_bcls();
 		assertEquals(-1, spy.get_bcls());
 	}
 	
@@ -210,6 +239,19 @@ public class TestStructuralMetricsCommentsCheck {
 		assertEquals(1, spy.getNumComments());
 		assertEquals(31, spy.getNumComments() + spy.getNumLinesComments());
 		
+	}
+	
+	@Test
+	public void computeBCCountTest() {
+		StructuralMetricsCommentsCheck spy = spy(new StructuralMetricsCommentsCheck());
+		spy.set_bcle(6);
+		spy.set_bcls(3);
+		
+		spy.computeBCCount();
+		
+		assertEquals(3, spy.getNumLinesComments());
+		assertEquals(-1, spy.get_bcle());
+		assertEquals(-1, spy.get_bcls());
 	}
 	
 	

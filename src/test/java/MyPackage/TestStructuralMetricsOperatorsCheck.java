@@ -6,6 +6,7 @@ import static org.mockito.Mockito.spy;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 public class TestStructuralMetricsOperatorsCheck {
@@ -59,6 +60,7 @@ public class TestStructuralMetricsOperatorsCheck {
 		spy.finishTree(mock);
 		assertEquals(1, spy.metrics.getOps());
 		assertEquals(1, spy.metrics.getUniqueOps().size());
+		
 	}
 	
 	@Test
