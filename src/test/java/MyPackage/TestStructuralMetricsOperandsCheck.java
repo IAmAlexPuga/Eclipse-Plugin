@@ -72,6 +72,7 @@ public class TestStructuralMetricsOperandsCheck {
 		DetailAST parent = mock(DetailAST.class);
 		
 		spy.metrics.resetOperands();
+		spy.metrics.resetUniqueOperands();
 
 		Mockito.when(parent.getType()).thenReturn(TokenTypes.EXPR);
 		Mockito.when(mock.getParent()).thenReturn(parent);
@@ -100,11 +101,11 @@ public class TestStructuralMetricsOperandsCheck {
 		Mockito.when(spy.isValidIdent(mock)).thenReturn(true);
 		Mockito.when(mock.getText()).thenReturn("a");
 		spy.visitToken(mock);
-		assertEquals(2, spy.metrics.getUniqueOperands().size());
+		assertEquals(1, spy.metrics.getUniqueOperands().size());
 		
 		spy.visitToken(mock);
 		// fails since a unique op with a exists spy.visitToken(mock);
-		assertEquals(2, spy.metrics.getUniqueOperands().size());
+		assertEquals(1, spy.metrics.getUniqueOperands().size());
 
 	}
 
