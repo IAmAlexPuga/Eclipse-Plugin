@@ -79,6 +79,7 @@ public class TestStructuralMetricsOperatorsCheck {
 		assertEquals(1,spy.metrics.getOps());
 		
 		Mockito.when(mock.getType()).thenReturn(TokenTypes.PLUS);
+		spy.visitToken(mock);
 		assertEquals(1, spy.metrics.getUniqueOps().size());
 	}
 	
