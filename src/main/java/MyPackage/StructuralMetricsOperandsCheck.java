@@ -1,6 +1,9 @@
 package MyPackage;
 
 import com.puppycrawl.tools.checkstyle.api.*;
+
+import jdk.nashorn.internal.parser.TokenType;
+
 import java.util.regex.Pattern;
 import java.util.*;
 
@@ -69,12 +72,12 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 	}
 	
 	public void addUniqueOperand(DetailAST aAST) {
-		if (!metrics.getUniqueOperands().containsKey(aAST.getText())) {
-			if(aAST.getType() == TokenTypes.METHOD_CALL) {
-				metrics.addUniqueOperands(aAST.getText()+metrics.getUniqueOperands().size(), 1);
-			}else {
-				metrics.addUniqueOperands(aAST.getText(), 1);
-			}
+		if(aAST.getType() == TokenTypes.METHOD_CALL) {
+			String key = getName(aAST); 
+			metrics.addUniqueOperands(key, 1);
+		}else {
+			metrics.addUniqueOperands(aAST.getText(), 1);
+
 		}
 		
 	}
@@ -111,6 +114,28 @@ public class StructuralMetricsOperandsCheck extends AbstractCheck {
 		metrics.resetOperands();
 		metrics.resetUniqueOperands();
 
+	}
+	
+	public String getName(DetailAST ast) {
+		
+		String res = "";
+
+		ast = ast.findFirstToken(59);
+		while(ast.getFirstChild().getType() != TokenTypes.IDENT) {
+			ast = ast.getFirstChild();
+			if(ast.getNextSibling() != null) {
+				res += ast.getNextSibling().getText() + ".";
+			}
+			ast = ast.findFirstToken(59);
+		}
+		
+		ast = ast.getFirstChild();
+		while(ast != null) {
+			res += ast.getText() + ".";
+			ast = ast.getNextSibling();
+		}
+		
+		return res;
 	}
 
 }

@@ -109,14 +109,6 @@ public class TestExprCheck {
 		
 		assertEquals(1, spy.metrics.getExprs());
 		
-		String msgs[] = {"Expressions: 1"};
-		int count = 0;
-		for (LocalizedMessage lm : spy.getMessages()) {
-			assertEquals(msgs[count], lm);
-			count++;
-		}
-
-		
 	}
 	
 

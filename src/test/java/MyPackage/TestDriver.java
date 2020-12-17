@@ -95,7 +95,7 @@ public class TestDriver {
 		// Complete tree and display intended logs to user.
 		check.finishTree(root);
 
-		String msgs[] = { "Number of operands: 18", "Number of unique operands: 15" };
+		String msgs[] = { "Number of operands: 19", "Number of unique operands: 16" };
 		int count = 0;
 		// checks the size of log outputs
 		assertEquals(2, check.getMessages().size());
@@ -109,8 +109,8 @@ public class TestDriver {
 		int uniqOpSize = check.metrics.getUniqueOperands().size();
 
 		// Verify Results
-		assertEquals(18, resultOperands);
-		assertEquals(15, uniqOpSize);
+		assertEquals(19, resultOperands);
+		assertEquals(16, uniqOpSize);
 
 		System.out.println("Operands Check Done!");
 
@@ -212,8 +212,8 @@ public class TestDriver {
 		// default values from prev Black box test
 		int ops = 3;
 		int uniqOps = 2;
-		int oprands = 18;
-		int uniqOprands = 15;
+		int oprands = 19;
+		int uniqOprands = 16;
 
 		int rHLength = ops + oprands;
 		double rHVoc = uniqOprands + uniqOps;
