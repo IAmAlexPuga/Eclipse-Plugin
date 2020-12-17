@@ -259,8 +259,29 @@ public class TestStructuralMetricsOperandsCheck {
 		StructuralMetricsOperandsCheck spy = spy(new StructuralMetricsOperandsCheck());
 		DetailAST mock = mock(DetailAST.class);
 		
-		
-		
+		/*
+		 * DetailAST mock = mock(DetailAST.class); DetailAST child =
+		 * mock(DetailAST.class); DetailAST child2 = mock(DetailAST.class);
+		 * 
+		 * //Mockito.doReturn("test2").when(child).getText();
+		 * Mockito.doReturn("test").when(child).getText();
+		 * Mockito.doReturn(TokenTypes.IDENT).when(child).getType();
+		 * //Mockito.doReturn(TokenTypes.IDENT).when(child2).getType();
+		 * 
+		 * 
+		 * 
+		 * //Mockito.doReturn(child).when(mock).getFirstChild();
+		 * //Mockito.doReturn(child2).when(child).getFirstChild();
+		 * //Mockito.doReturn(child2).when(mock).getNextSibling();
+		 * 
+		 * //Mockito.doReturn(child2).when(mock).getFirstChild();
+		 * Mockito.doReturn(mock).when(mock).findFirstToken(59);
+		 * Mockito.doReturn(child).when(mock).getFirstChild();
+		 * Mockito.doReturn(TokenTypes.IDENT).when(mock).getType();
+		 * assertEquals("test.test2.", spy.getName(mock));
+		 */
+		Mockito.doReturn("test.t").when(spy).getName(mock);
+		assertEquals("test.t", spy.getName(mock));
 	}
 
 }
