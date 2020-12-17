@@ -212,7 +212,7 @@ public class TestStructuralMetricsOperandsCheck {
 		assertEquals(1, spy.metrics.getUniqueOperands().size());
 		
 		Mockito.doReturn(TokenTypes.METHOD_CALL).when(mock).getType();
-		Mockito.doReturn("b").when(mock).getText();
+		Mockito.doReturn("b").when(spy).getName(mock);
 		spy.addUniqueOperand(mock);
 		assertEquals(2, spy.metrics.getUniqueOperands().size());
 		
@@ -252,6 +252,15 @@ public class TestStructuralMetricsOperandsCheck {
 
 		assertEquals(0, spy.metrics.getOperands());
 		assertEquals(0, spy.metrics.getUniqueOperands().size());
+	}
+	
+	@Test
+	public void getNameTest() {
+		StructuralMetricsOperandsCheck spy = spy(new StructuralMetricsOperandsCheck());
+		DetailAST mock = mock(DetailAST.class);
+		
+		
+		
 	}
 
 }
